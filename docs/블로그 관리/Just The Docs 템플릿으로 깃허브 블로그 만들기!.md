@@ -4,7 +4,8 @@ title: Just The Docs 템플릿으로 깃허브 블로그 만들기
 parent: 블로그 관리
 ---
 
-> # Just The Docs 템플릿으로 깃허브 블로그 만들기
+> # Just The Docs 템플릿으로
+> # 깃허브 블로그 만들기
 
 ---
 
