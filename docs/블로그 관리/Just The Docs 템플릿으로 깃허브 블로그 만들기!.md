@@ -1,10 +1,12 @@
 ---
 layout: default
-title: Just The Docs 템플릿으로 깃허브 블로그 만들기!
+title: Just The Docs 템플릿으로 깃허브 블로그 만들기
 parent: 블로그 관리
 ---
 
-asdf
+> # Just The Docs 템플릿으로 깃허브 블로그 만들기
+
+---
 
 1. 블로그 생성
 
