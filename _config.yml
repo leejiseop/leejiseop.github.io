@@ -14,15 +14,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-# title: 
-# description: 
 theme: just-the-docs
 color_scheme: custom-color
-
-# url: 
-
-# aux_links:
-  # Template Repository: https://github.com/just-the-docs/just-the-docs-template
 
 encoding: UTF-8
 
@@ -123,8 +116,6 @@ heading_anchors: true
 
 # Aux links for the upper right navigation
 aux_links:
-  "Just the Docs on GitHub":
-    - "https://github.com/just-the-docs/just-the-docs"
 
 # Makes Aux links open in a new tab. Default is false
 aux_links_new_tab: false
@@ -169,9 +160,6 @@ gh_edit_repository: "https://github.com/just-the-docs/just-the-docs" # the githu
 gh_edit_branch: "main" # the branch that your docs is served from
 # gh_edit_source: docs # the source that your files originate from
 gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
-
-# Color scheme currently only supports "dark", "light"/nil (default), or a custom scheme that you define
-color_scheme: nil
 
 callouts_level: quiet # or loud
 callouts:
