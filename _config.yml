@@ -14,12 +14,16 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: 🔥 JUST DO IT 🔥
+title: 한글
 description: A starter template for a Jeykll site using the Just the Docs theme!
 theme: just-the-docs
 color_scheme: custom-color
 
 url: https://leejiseop.github.io
+favicon_ico: "/assets/images/favicon.ico"
+
+# Set a path/url to a logo that will be displayed instead of the title
+logo: "/assets/images/favicon.ico"
 
 aux_links:
   # Template Repository: https://github.com/just-the-docs/just-the-docs-template
@@ -60,9 +64,6 @@ exclude:
   - Dockerfile
   # theme test code
   - fixtures/
-
-# Set a path/url to a logo that will be displayed instead of the title
-#logo: "/assets/images/just-the-docs.png"
 
 # Enable or disable the site search
 # Supports true (default) or false
