@@ -193,8 +193,8 @@ compress_html:
   # ignore:
   #   envs: all
 
-# plugins:
-#   - jekyll-seo-tag
-#   - jekyll-github-metadata
+plugins:
+  - jekyll-seo-tag
+  - jekyll-github-metadata
 #   - jekyll-include-cache
-#   - jekyll-sitemap
+  - jekyll-sitemap
