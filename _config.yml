@@ -195,6 +195,6 @@ compress_html:
 
 plugins:
   - jekyll-seo-tag
-  - jekyll-github-metadata
-#   - jekyll-include-cache
-  - jekyll-sitemap
+  # - jekyll-github-metadata
+  # - jekyll-include-cache
+  # - jekyll-sitemap
