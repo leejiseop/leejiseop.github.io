@@ -56,12 +56,14 @@
 
       &:hover,
       &.active {
-        background-image: linear-gradient(
-          -90deg,
-          rgba($feedback-color, 1) 0%,
-          rgba($feedback-color, 0.8) 80%,
-          rgba($feedback-color, 0) 100%
-        );
+        // background-image: linear-gradient(
+        //   -90deg,
+        //   rgba($feedback-color, 1) 0%,
+        //   rgba($feedback-color, 0.8) 80%,
+        //   rgba($feedback-color, 0) 100%
+        // );
+        background-color: $feedback-color;
+        border-left: 4px solid $body-text-color;
       }
     }
 
@@ -83,11 +85,13 @@
       }
 
       &:hover {
-        background-image: linear-gradient(
-          -90deg,
-          rgba($feedback-color, 1) 0%,
-          rgba($feedback-color, 0.8) 100%
-        );
+        // background-image: linear-gradient(
+        //   -90deg,
+        //   rgba($feedback-color, 1) 0%,
+        //   rgba($feedback-color, 0.8) 100%
+        // );
+        background-color: $feedback-color;
+        border-left: 4px solid $body-text-color;
       }
 
       @if $nav-list-expander-right {
