@@ -8,7 +8,9 @@
   & > code {
     padding: 0.2em 0.15em;
     font-weight: 400;
-    background-color: $code-background-color;
+    // background-color: $code-background-color;
+    background-color: #762f09;
+    color: white;
     border: $border $border-color;
     border-radius: $border-radius;
   }
