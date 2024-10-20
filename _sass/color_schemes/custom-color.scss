@@ -1,3 +1,17 @@
 @import "./color_schemes/dark";
 
-$link-color: rgb(151, 255, 24);
+$body-background-color: #3e3e3e; // 오른쪽 본문 배경
+$body-heading-color: $grey-lt-000; // heading
+$body-text-color: $grey-lt-300; // 본문
+$link-color: #dcff16; // 하이라이트 링크
+$nav-child-link-color: $grey-dk-000; // 자식 제목
+$sidebar-color: #222222; // 왼쪽 사이드바 배경
+$base-button-color: $grey-dk-250; // 버튼
+$btn-primary-color: $blue-200;
+$code-background-color: #23251a; // OneDarkJekyll default for syntax-one-dark-vivid, 코드 블록
+$code-linenumber-color: #dee2f7; // OneDarkJekyll .nf for syntax-one-dark-vivid
+$feedback-color: darken($sidebar-color, 3%);
+$table-background-color: $grey-dk-250;
+$search-background-color: $grey-dk-250;
+$search-result-preview-color: $grey-dk-000;
+$border-color: $grey-dk-200;
