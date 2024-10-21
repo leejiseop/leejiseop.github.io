@@ -11,7 +11,8 @@
     position: fixed;
     width: $nav-width-md;
     height: 100%;
-    border-right: $border $border-color;
+    // border-right: $border $border-color;
+    border-right: $border $body-background-color; // 중앙 세로선
     align-items: flex-end;
   }
 
@@ -78,7 +79,8 @@
 
 .main-header {
   z-index: 0;
-  border-bottom: $border $border-color;
+  // border-bottom: $border $border-color;
+  border-bottom: $border $body-background-color; // 검색창 밑에
 
   @include mq(md) {
     display: flex;
@@ -113,6 +115,12 @@
   }
 }
 
+.site-nav::-webkit-scrollbar-thumb {
+  background-color: red !important;
+  background: red !important;
+  color: red !important;
+}
+
 .site-header {
   display: flex;
   min-height: $header-height;
@@ -121,7 +129,8 @@
   @include mq(md) {
     height: $header-height;
     max-height: $header-height;
-    border-bottom: $border $border-color;
+    // border-bottom: $border $border-color;
+    border-bottom: $border $sidebar-color; // 블로그 제목 밑에
   }
 }
 
