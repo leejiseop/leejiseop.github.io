@@ -1,3 +1,26 @@
 {%- if site.footer_content -%}
   <p class="text-small text-grey-dk-100 mb-0">{{ site.footer_content }}</p>
 {%- endif -%}
+<article id="postArticle">
+  <p id="desc" class="fs-3 m-0" style="font-style: italic;">“ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ”</p>
+  <p id="author" class="fs-3 m-3" style="font-style: italic;">asdf</p>
+  <script>
+		(async function () {
+			try {
+				const res = await fetch('../assets/js/quotes.json');
+				const phrase_ = await res.json();
+				const $desc = document.getElementById('desc');
+				const $author = document.getElementById('author');
+				function ranQuote() {
+					const ran1 = Math.floor(Math.random() * phrase_.length);
+					const { quote: id, author, en } = phrase_[ran1];
+					$desc.innerHTML = `“ ${en} ”`;
+          $author.innerHTML = author;
+				}
+				ranQuote();
+			} catch (err) {
+				console.log(err);
+			}
+		})();
+	</script>
+</article>
