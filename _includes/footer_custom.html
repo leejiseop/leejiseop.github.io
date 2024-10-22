@@ -2,20 +2,24 @@
   <p class="text-small text-grey-dk-100 mb-0">{{ site.footer_content }}</p>
 {%- endif -%}
 <article id="postArticle">
-  <p id="desc" class="fs-3 m-0" style="font-style: italic;">“ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ”</p>
-  <p id="author" class="fs-3 m-3" style="font-style: italic;">asdf</p>
+  <p id="q_message" class="fs-4 m-0" style="font-weight: bold;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <div class="m-3">
+    <p id="q_author" class="fs-3 m-0" style="font-style: oblique; font-weight: bold; color: #888888;">author</p>
+    <p id="q_author_detail" class="fs-3 m-0" style="font-style: oblique; font-weight: bold; color: #888888;">author2</p>
+  </div>
   <script>
 		(async function () {
 			try {
-				const res = await fetch('../assets/js/quotes.json');
+				const res = await fetch('../assets/js/kadvice.json');
 				const phrase_ = await res.json();
-				const $desc = document.getElementById('desc');
-				const $author = document.getElementById('author');
+				const $q_message = document.getElementById('q_message');
+				const $q_author = document.getElementById('q_author');
+        const $q_author_detail = document.getElementById('q_author_detail');
 				function ranQuote() {
-					const ran1 = Math.floor(Math.random() * phrase_.length);
-					const { quote: id, author, en } = phrase_[ran1];
-					$desc.innerHTML = `“ ${en} ”`;
-          $author.innerHTML = author;
+          const ran1 = Math.floor(Math.random() * phrase_.length);
+          $q_author.innerHTML = phrase_[ran1]['author'];
+          $q_author_detail.innerHTML = phrase_[ran1]['author_detail'];
+					$q_message.innerHTML = phrase_[ran1]['message'];
 				}
 				ranQuote();
 			} catch (err) {
