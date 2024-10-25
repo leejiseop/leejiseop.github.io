@@ -1,17 +1,19 @@
 {%- if site.footer_content -%}
   <p class="text-small text-grey-dk-100 mb-0">{{ site.footer_content }}</p>
 {%- endif -%}
+
 <article id="postArticle">
-  <p id="q_message" class="fs-4 m-0" style="font-weight: bold;"></p>
+  <p id="q_message" class="fs-4 m-0" style="font-weight: bold;">ㅁㄴㅇㄹ</p>
   <div class="m-3">
-    <p id="q_author" class="fs-3 m-0" style="font-style: oblique; font-weight: bold; color: #888888;"></p>
-    <p id="q_author_detail" class="fs-3 m-0" style="font-style: oblique; font-weight: bold; color: #888888;"></p>
+    <p id="q_author" class="fs-3 m-0" style="font-style: oblique; font-weight: bold; color: #888888;">ㅁㄴㅇㄹ</p>
+    <p id="q_author_detail" class="fs-3 m-0" style="font-style: oblique; font-weight: bold; color: #888888;">ㅁㅇㄴㄹ</p>
   </div>
   <script>
 		(async function () {
-			try {
-				const res = await fetch('../assets/js/kadvice.json');
-				const phrase_ = await res.json();
+      try {
+        const kadvice_response = await fetch('http://localhost:4000/assets/js/kadvice.json');
+				const phrase_ = await kadvice_response.json();
+        console.log("hi");
 				const $q_message = document.getElementById('q_message');
 				const $q_author = document.getElementById('q_author');
         const $q_author_detail = document.getElementById('q_author_detail');
