@@ -11,7 +11,7 @@
   <script>
 		(async function () {
       try {
-        const kadvice_response = await fetch('http://localhost:4000/assets/js/kadvice.json');
+        const kadvice_response = await fetch('https://leejiseop.github.io/assets/js/kadvice.json');
 				const phrase_ = await kadvice_response.json();
         console.log("hi");
 				const $q_message = document.getElementById('q_message');
