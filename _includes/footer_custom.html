@@ -13,7 +13,6 @@
       try {
         const kadvice_response = await fetch('https://leejiseop.github.io/assets/js/kadvice.json');
 				const phrase_ = await kadvice_response.json();
-        console.log("hi");
 				const $q_message = document.getElementById('q_message');
 				const $q_author = document.getElementById('q_author');
         const $q_author_detail = document.getElementById('q_author_detail');
