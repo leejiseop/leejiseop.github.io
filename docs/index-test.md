@@ -1,7 +1,6 @@
 ---
 title: Markdown kitchen sink
 nav_order: 99
-parent: Just-The-Docs
 ---
 
 <button class="btn js-toggle-dark-mode">Preview dark color scheme</button>

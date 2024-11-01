@@ -1,7 +1,6 @@
 ---
 title: Search
 nav_order: 7
-parent: Just-The-Docs
 ---
 
 # Search

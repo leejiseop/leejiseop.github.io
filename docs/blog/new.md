@@ -3,6 +3,8 @@ layout: default
 title: Just The Docs 올릴것들
 parent: 블로그 관리
 ---
+
+ㅇㅇ
 https://2dowon.github.io/docs/algorithm/python-book/dynamic-programming/
 1. 블로그 만들기
    1. https://jeesub.github.io/blog/jekyll-blog-%EB%A7%8C%EB%93%A4%EA%B8%B0/
