@@ -59,6 +59,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ```
 
+## 하이라이트
+
+{: .highlight }
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+```md
+{: .highlight }
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+```
+
 ## 표 만들기
 
 | head1        | head two          | three |
@@ -159,4 +169,40 @@ graph TD;
     B-->D;
     C-->D;
 \```
+```
+
+## And an ordered list, continued:
+
+1.  Item one
+1.  Item two
+
+Some text
+
+{:style="counter-reset:none"}
+1.  Item three
+1.  Item four
+
+```md
+1.  Item one
+1.  Item two
+
+Some text
+
+{:style="counter-reset:none"}
+1.  Item three
+1.  Item four
+```
+
+## And an ordered list starting from 42:
+
+{:style="counter-reset:step-counter 41"}
+1.  Item 42
+1.  Item 43
+1.  Item 44
+
+```md
+{:style="counter-reset:step-counter 41"}
+1.  Item 42
+1.  Item 43
+1.  Item 44
 ```
