@@ -65,7 +65,8 @@ a {
 
 a:not([class]) {
   text-decoration: underline;
-  text-decoration-color: $border-color;
+  // text-decoration-color: $border-color;
+  text-decoration-color: $body-background-color;
   text-underline-offset: 2px;
 
   &:hover {

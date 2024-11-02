@@ -21,6 +21,7 @@ https://2dowon.github.io/docs/algorithm/python-book/dynamic-programming/
    5. this.use(lunr.multiLanguage('en', 'ko')); 어디다가 추가하나
 3. 테마 컬러와 폰트 변경
    1. 커스텀 scheme 만들기
+   2. 한글경로+한글파일 -> jekyll 오류 -> 영어로 통일
 4. 구글 애널리틱스
 5. 명언과 cors
    1. 에러메세지 - 경로문제였네

@@ -15,7 +15,7 @@ $feedback-color: #3d3d3d;
 $table-background-color: $grey-dk-250;
 $search-background-color: #505050;
 $search-result-preview-color: #d6e197;
-$border-color: #3d3d3d;
+$border-color: $grey-dk-000;
 
 * {
     // font-family: 'NanumSquareNeoLight';
@@ -23,4 +23,8 @@ $border-color: #3d3d3d;
     // font-family: 'NanumSquareNeoBold';
     // font-family: 'NanumSquareNeoExtraBold';
     // font-family: 'NanumSquareNeoHeavy';
+}
+
+a {
+    text-decoration-line: none;
 }
