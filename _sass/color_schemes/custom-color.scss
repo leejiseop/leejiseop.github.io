@@ -18,8 +18,8 @@ $search-result-preview-color: #d6e197;
 $border-color: $grey-dk-000;
 
 * {
-    // font-family: 'NanumSquareNeoLight';
-    font-family: 'NanumSquareNeo';
+    font-family: 'NanumSquareNeoLight';
+    // font-family: 'NanumSquareNeo';
     // font-family: 'NanumSquareNeoBold';
     // font-family: 'NanumSquareNeoExtraBold';
     // font-family: 'NanumSquareNeoHeavy';
@@ -27,4 +27,11 @@ $border-color: $grey-dk-000;
 
 a {
     text-decoration-line: none;
+}
+
+strong {
+    padding: 2px;
+    border-radius: 5px;
+    color: white;
+    background-color: #686b00;
 }
