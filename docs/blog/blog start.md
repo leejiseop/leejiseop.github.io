@@ -23,7 +23,36 @@ Github Pages 블로그를 구축하는 경우 다양한 기능을 가진 페이�
 
 ## jekyll
 
-위에서 설명했듯 jekyll은 정적 웹사이트 생성기이다. 
+위에서 설명했듯 [jekyll](https://jekyllrb.com/)은 정적 웹사이트 생성기이다. jekyll은 루비로 만들어진 프로그램이기 때문에 먼저 ruby 설치가 필요하다. 맥은 ruby가 기본적으로 설치되어있지만, 그대로 jekyll을 설치하면 오류가 발생하므로 ruby 버전 관리자인 rbenv를 통해 최신 ruby 버전을 설치한다.  
+```
+brew update
+brew install rbenv ruby-build
+rbenv versions
+```
+이후 설치 가능한 루비 버전 목록을 확인하고, 최신 버전을 설치한 뒤
+```
+rbenv install -l
+rbenv install 3.3.5
+```
+기존 시스템 ruby가 아닌 새로 설치한 버전을 사용하도록 global 설정을 변경해준다.
+```
+rbenv global 3.3.5
+```
+이후 jekyll과 bundler를 설치한다.
+```
+gem install jekyll bundler
+```
+
+## username.github.io
+
+본인의 깃허브 닉네임이 들어간 `username.github.io` 가 이름인 레포지토리를 생성하고, 원하는 디렉토리에 clone한다.  
+해당 디렉토리에 이동하여
+```
+
+```
+
+
+
 
 https://2dowon.github.io/docs/algorithm/python-book/dynamic-programming/
 1. 블로그 만들기
