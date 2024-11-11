@@ -52,8 +52,10 @@ gem install jekyll bundler
 필자는 [Just-The-Docs](https://just-the-docs.com/)라는 테마를 사용하였다.  
 Just-The-Docs의 github repo를 fork해도 되지만, 그러면 블로그 업데이트 시 나의 깃허브에 잔디가 심어지지 않는다.
 
-비어있는 레포지토리에서 jekyll을 초기화 생성하여 동작을 확인할 수도 있지만, 이후 초기화 과정이 번거로우므로 바로 [Just-The-Docs Template](https://just-the-docs.github.io/just-the-docs-template/)을 사용하여 본인의 깃허브 닉네임이 들어간 `username.github.io` 가 이름인 레포지토리를 생성하고, 원하는 디렉토리에 clone한다.  
-해당 디렉토리에 이동하여
+비어있는 레포지토리에서 jekyll을 초기화 생성하여 동작을 확인할 수도 있지만, 이후 테마 적용을 위한 재 초기화 과정이 번거로우므로 처음부터 바로 [Just-The-Docs Template](https://just-the-docs.github.io/just-the-docs-template/)을 사용하여 본인의 깃허브 닉네임이 들어간 `username.github.io` 가 이름인 레포지토리를 생성한다.  
+이후 settings - pages - build and deployment - source 를 GitHub Actions 로 변경해준다.
+
+원하는 디렉토리에 clone하고 해당 디렉토리에 이동하여
 ```
 bundle install
 bundle update
@@ -61,6 +63,7 @@ bundle install
 bundle exec jekyll serve
 ```
 을 실행하고 `http://127.0.0.1:4000/` 에 접속하면 jekyll 페이지가 생성되었음을 확인할 수 있다.
+`http://127.0.0.1:4000/` 에서 게시글 작성 과정을 실시간으로 확인 가능하고, repository에 push하면 그대로 `username.github.io` 사이트에 반영된다.
 
 ## 게시물 작성법
 

@@ -1,7 +1,5 @@
 ---
 layout: default
-title: 1일차
+title: 섹션 7
 parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 ---
-
-asdfasdf
