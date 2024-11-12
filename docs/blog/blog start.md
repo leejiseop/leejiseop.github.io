@@ -52,7 +52,7 @@ gem install jekyll bundler
 필자는 [Just-The-Docs](https://just-the-docs.com/)라는 테마를 사용하였다.  
 Just-The-Docs의 github repo를 fork해도 되지만, 그러면 블로그 업데이트 시 나의 깃허브에 잔디가 심어지지 않는다.
 
-비어있는 레포지토리에서 jekyll을 초기화 생성하여 동작을 확인할 수도 있지만, 이후 테마 적용을 위한 재 초기화 과정이 번거로우므로 처음부터 바로 [Just-The-Docs Template](https://just-the-docs.github.io/just-the-docs-template/)을 사용하여 본인의 깃허브 닉네임이 들어간 `username.github.io` 가 이름인 레포지토리를 생성한다.  
+또한 비어있는 레포지토리에서 jekyll을 초기화 생성하여 첫 동작을 확인할 수도 있지만, 이후 테마 적용을 위한 재 초기화 과정이 번거로우므로 처음부터 바로 [Just-The-Docs Template](https://just-the-docs.github.io/just-the-docs-template/)을 사용하여 본인의 깃허브 닉네임이 들어간 `username.github.io` 가 이름인 레포지토리를 생성한다.  
 이후 settings - pages - build and deployment - source 를 GitHub Actions 로 변경해준다.
 
 원하는 디렉토리에 clone하고 해당 디렉토리에 이동하여
@@ -80,6 +80,12 @@ parent: how to jekyll (부모의 title) (생략가능)
 ```
 docs 내부에 폴더를 만들어서 관리할 경우, 폴더 내부에 index.md를 만들고 마찬가지로 위와 같이 작성하여 카테고리 대표 페이지를 만들 수 있다.
 
+{: .warning }
+디렉토리 및 마크다운 파일명에 한글이 포함되지 않도록 주의한다. 경로명에 한글이 포함되는 경우, 간혹 `bundle exec jekyll serve`가 멈춰버리는 경우가 발생한다.
+
 ## 블로그 꾸미기
 
 사실 위 방식대로 just-the-docs template을 사용하여 블로그를 개설한 경우, 최소한의 파일들만 생성되기 때문에 커스터마이징이 쉽지 않았다. 필자는 just-the-docs의 github repo를 통째로 가져와서 직접 css를 편집하여 취향껏 꾸몄다. [MIT 라이선스](https://ko.wikipedia.org/wiki/MIT_%ED%97%88%EA%B0%80%EC%84%9C)가 적용되어 있으므로, 마음껏 사용은 가능하지만 라이선스 및 저작권 고지는 항상 유지되어야 한다. 디렉토리 내 `LICENSE` 파일을 지우지 않도록 유의한다.
+
+F12를 눌러 크롬 개발자 모드로 진입하여 요소 선택 후 적용되어있는 css 파일을 찾아가 직접 수정하거나,  
+덮어씌울 내용을 `/_sass/custom/custom.scss`에 추가하여 변경할 수 있다.
