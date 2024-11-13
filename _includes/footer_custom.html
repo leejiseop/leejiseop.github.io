@@ -11,7 +11,7 @@
   <script>
 		(async function () {
       try {
-        const kadvice_response = await fetch('https://leejiseop.github.io/assets/js/kadvice.json');
+        const kadvice_response = await fetch('https://leejiseop.github.io/assets/js/kor_quotes.json');
 				const phrase_ = await kadvice_response.json();
 				const $q_message = document.getElementById('q_message');
 				const $q_author = document.getElementById('q_author');
