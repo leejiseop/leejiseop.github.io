@@ -29,10 +29,48 @@ parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 프록시 인스턴스 초기화 여부 확인 `emf.getPersistenceUnitUtil().isLoaded(refMember)`
 프록시 강제 초기화 `Hibernate.initialize(refMember)` (JPA 표준은 강제 초기화 제공 X)
 
-
-
 ## 즉시 로딩과 지연 로딩
+
+```java
+public class Member extends BaseEntity{
+    // 중략
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEAM_ID") // db 입장에서 join 할때 필요한 column 명
+    private Team team;
+    // 중략
+}
+```
+`@ManyToOne(fetch = FetchType.LAZY)` 가 붙은 `Team` 이 바로 프록시 객체 조회  
+`Team` 을 **실제로 사용할 때** `Team` 이 조회가 된다.  
+`EAGER` 는 **JOIN** 해서 **즉시로딩**으로 가져온다.  
+**항상 LAZY loading을 사용할 것**  
+즉시로딩은 **전혀 예상치 못한 쿼리**를 날릴 수 있고, **N+1 문제**를 야기할 수 있다.  
+**N+1 문제 해결법** : LAZY loading, **JPQL fetch join**, entity graph annotation, batch size 
+fetch join은 왜 n+1이 안생기나? 이거랑 eager의 차이
+@ManyToOne, @OneToOne = EAGER default
+@OneToMany, @ManyToMany = LAZY default
 
 ## 영속성 전이: CASCADE
 
+즉시로딩, 지연로딩, 연관관계 세팅과 전혀 상관 없다!  
+`@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)`  
+하나를 persist하면 줄줄이 이어서  
+**Life cycle이 유사하고, 명확하게 하나의 소유자와 종속 관계가 있을때** 사용 (게시판과 첨부파일)
+
 ## 고아 객체와 생명주기
+
+부모 엔티티와 연관관계가 끊어진 자식 엔티티를 자동으로 삭제  
+`@OneToMany(mappedBy = "parent", orphanRemoval = true)`  
+```java
+Parent parent1 = em.find(Parent.class, id);
+parent1.getChildren().remove(0);
+// 자식 엔티티를 컬렉션에서 제거
+// DELETE FROM CHILD WHERE ID = ?
+```
+**참조하는 곳이 하나일 때** 사용해야함! (게시판과 첨부파일)  
+**특정 엔티티가 개인 소유할 때** 사용
+**부모를 제거할때도 자식들까지 제거된다**
+
+영속성 전이 + 고아객체 모두 활성화하면  
+부모 엔티티를 통해서 자식의 **생명주기**를 관리할 수 있음 - DDD의 Aggregate Root 개념 구혈할 때 유용
+
