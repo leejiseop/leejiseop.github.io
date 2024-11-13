@@ -30,6 +30,7 @@ parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 프록시 강제 초기화 `Hibernate.initialize(refMember)` (JPA 표준은 강제 초기화 제공 X)
 
 
+
 ## 즉시 로딩과 지연 로딩
 
 ## 영속성 전이: CASCADE

@@ -1,7 +1,8 @@
 ---
 layout: default
 title: 마크다운 정리
-nav_order: 999
+nav_order: 0
+parent: etc
 ---
 
 # 마크다운 확장 문법
