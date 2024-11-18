@@ -64,14 +64,27 @@ ex) String name, int age
 하지만 결국 실수는 나오기 마련이고 값 타입(객체) 공유 참조는 피할 수 없다  
 그래서 객체 타입을 수정할 수 없게 만들면 부작용이 원천 차단된다.  
 **불변 객체(Immutable object)**: 생성 시점 이후 절대 **값을 변경할 수 없는 객체**  
-**setter를 만들지 않으면 됨**  
+**setter를 만들지 않으면 됨** (또는 private final ... 등)  
 Integer, String: 자바가 제공하는 대표적인 불변 객체
 
 ## 값 타입의 비교
 
-
+값 타입 : 인스턴스가 달라도 그 안의 값이 같으면 true로 나온다  
+객체 타입 : 단순 비교하면 false  
+**동일성 비교** (identity): 인스턴스의 참조값을 비교 **==**  
+**동등성 비교** (equivalence): 인스턴스의 값을 비교, **equals()**  
+**equals() 메소드는 기본적으로 == 비교**라서, **오버라이드 후 재정의가 필요**하다  
 
 ## 값 타입 컬렉션
+
+하나 이상의 값 타입을 컬렉션에 담아서 쓴다 -> 테이블이 필요, 엔티티는 아님  
+```java
+@ElementCollection
+@CollectionTable(name = "ADDRESS", joinColumns =
+    @JoinColumn(name = "MEMBER_ID")
+)
+private List<Address> addressHistory = new ArrayList<>();
+```
 
 
 
