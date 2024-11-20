@@ -11,5 +11,5 @@ parent: etc
 1. TOC
 {:toc}
 
-getter, setter, constructor 등 생성 : command + n
-변수 추출 : command + option + v
+getter, setter, constructor 등 생성 : **command + n**  
+변수 추출 : **command + option + v**  

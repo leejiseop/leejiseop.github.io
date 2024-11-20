@@ -57,15 +57,33 @@ ex) String name, int age
 
 ### 값 타입 공유 참조
 
-임베디드 타입같은 값 타입을 여러 엔티티에서 공유할 수도 있다 (위험, 부작용 발생)  
-회원 1과 회원 2가 하나의 임베디드 타입을 참조 -> 하나를 바꿨는데 UPDATE 쿼리가 두개  
-같이 뭔가를 공유해서 쓸 의도라면 임베디드 타입을 만들게 아니라 엔티티를 하나 만들어야 한다  
+임베디드 타입 같은 값 타입을 **여러 엔티티에서 공유할 수도 있다** (위험, 부작용 발생)  
+회원 1과 회원 2가 하나의 임베디드 타입을 참조 -> **하나를 바꿨는데 UPDATE 쿼리가 여러개**  
+같이 뭔가를 **공유해서 쓸 의도라면** 임베디드 타입을 만들게 아니라 **엔티티를 하나 만들어야 한다**  
 임베디드 값은 새로 만들고 내용을 복사해서 사용한다  
 하지만 결국 실수는 나오기 마련이고 값 타입(객체) 공유 참조는 피할 수 없다  
-그래서 객체 타입을 수정할 수 없게 만들면 부작용이 원천 차단된다.  
+그래서 객체 타입을 **수정할 수 없게 만들면 부작용이 원천 차단**된다.  
 **불변 객체(Immutable object)**: 생성 시점 이후 절대 **값을 변경할 수 없는 객체**  
 **setter를 만들지 않으면 됨** (또는 private final ... 등)  
-Integer, String: 자바가 제공하는 대표적인 불변 객체
+Integer, String: 자바가 제공하는 대표적인 불변 객체  
+**그리고 변경이 필요하면 아예 새로 만들어서 새로 할당하라**
+```java
+// home_city -> new_city
+// X
+findMember.getHomeAddress().setCity("new_city");
+// O - HomeAddress를 아예 갈아끼운다
+Address a = findMember.getHomeAddress();
+findMember.setHomeAddress(new Address("new_city", a.getStreet(), a.getZipcode()));
+
+// 치킨 -> 한식
+// 통째로 뺘고 갈아끼운다?
+findMember.getFavoriteFoods().remove("치킨");
+findMember.getFavoriteFoods().add("한식");
+
+// equals 를 사용한다. 컬렉션에 equals 메서드 구현 잘 되어있나 확인 필요
+findMember.getAddressHistory().remove(new Address("old1", "strees", "10000"));
+
+```
 
 ## 값 타입의 비교
 
@@ -85,6 +103,8 @@ Integer, String: 자바가 제공하는 대표적인 불변 객체
 )
 private List<Address> addressHistory = new ArrayList<>();
 ```
+값 타입 컬렉션은 **엔티티에 종속되어 생명주기를 공유**한다 (Cascade와 비슷)  
+컬렉션은 지연 로딩이 default  
 
 
 
