@@ -106,7 +106,58 @@ private List<Address> addressHistory = new ArrayList<>();
 값 타입 컬렉션은 **엔티티에 종속되어 생명주기를 공유**한다 (Cascade와 비슷)  
 컬렉션은 지연 로딩이 default  
 
+값 타입은 엔티티와 다르게 **식별자 개념이 없어서 변경시 추적이 어렵다**  
+변경이 발생하면 주인 엔티티와 연관된 **모든 데이터를 삭제**하고,  
+값 타입 컬렉션에 있는 현재 값을 **모두 다시 저장**한다.  
+
+값 타입 컬렉션을 매핑하는 테이블은 모든 컬럼을 묶어서 기본키를 구성해야한다.
+- null 입력 x
+- 중복 저장 x
+
+복잡하니 대안을 쓴다  
+실무에서는 상황에 따라 값 타입 컬렉션 대신 **일대다 관계 사용을 고려**한다.
+자체적인 ID 값이 있으니 값 타입이 아닌 엔티티이다.  
+"값 타입을 엔티티로 승극한다. 올려서 쓴다." 실무에서 이 방법을 많이 쓴다.
+
+그럼 값 타입 컬렉션은 언제 쓰나?
+- 진짜 단순할 때. 추척할 필요도 없고, 값이 바뀌어도 update 할 필요가 없을 때
+- 이럴때가 아니면 웬만하면 엔티티로 승격하여 사용하는게 좋다.
+
+## 정리
+
+- 엔티티
+  - 식별자 O
+  - 생명 주기 관리
+  - 공유
+- 값 타입
+  - 식별자 X
+  - 생명 주기가 엔티티에 의존
+  - 공유하지 않는 것이 안전(복사해서 사용)
+  - 혹시 모를 공유에 대비해 불변 객체로 만드는 것이 안전
+- 값 타입은 정말 값 타입을 써야한다고 판단될 때만 사용
+
 
 
 ## 값 타입 매핑
 
+**equals와 hashCode 생성**할 때 `Use getters when available` 선택  
+그래야 **프록시 객체**에서도 정상 작동함  
+**메서드를 통하는 과정**이 있어야 **값을 불러온다**  
+평소에 이런 습관을 들어두는게 안전한 편  
+```java
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Address address = (Address) o;
+    return Objects.equals(getCity(), address.getCity()) && Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getZipcode(), address.getZipcode());
+}
+
+@Override
+public int hashCode() {
+    return Objects.hash(getCity(), getStreet(), getZipcode());
+}
+```
+
+값 타입을 UML에서는 스테레오 타입 이라고도 부른다?  
+\<<Value Type\>> << >>
