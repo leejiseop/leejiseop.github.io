@@ -86,7 +86,59 @@ JPA를 우회해서 SQL을 실행하기 직전에 영속성 컨텍스트 수동 
 
 ## 기본 문법과 쿼리 API
 
+### 기본 문법
 
+JPQL은 객체지향 쿼리 언어, 테이블이 아닌 엔티티 객체를 대상으로 쿼리한다.  
+JPQL은 결국 SQL로 변환된다. (SQL의 추상화: 특정 DB에 종속되지 않는다)  
+`select m from Member as m where m.age > 18`
+엔티티와 속성은 대소문자를 구분한다(Member, age)  
+JPQL 키워드는 대소문자 구분하지 않는다(SELECT, FROM, where)  
+테이블이 아닌 엔티티 이름을 사용한다(기본은 클래스명, `@Entity(name = "asdf")`로 지정 가능)  
+별칭 필수(m) (as는 생략 가능)  
+
+### 집합과 정렬
+
+group by, having, order by
+
+### TypeQuery, Query
+
+- TypeQuery: 반환 타입이 **명확할 때** 사용
+- Query: 반환 타입이 **명확하지 않을 때** 사용
+
+```java
+TypedQuery<Member> query = 
+    em.createQuery("SELECT m FROM Member m", Member.class);
+Query query = 
+    em.createQuery("SELECT m.username, m.age from Member m");
+
+TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
+TypedQuery<String> query2 = em.createQuery("select m.username from Member m", String.class);
+Query query3 = em.createQuery("select m.username, m.age from Member m");
+```
+
+### 결과 조회 API
+
+- query.getResultList()
+  - 결과가 하나 이상, 리스트 반환
+  - 없으면 빈 리스트 반환
+- query.getSingleResult()
+  - 결과가 정확히 하나, 단일 객체 반환
+  - 없으면 javax.persistence.NoResultException -> jakarta?
+  - 둘 이상이면 javax.persistence.NonUniqueResultException -> try-catch 필요
+  - spring data jpa에서는 결과가 없으면 exception 대신 null이나 optional 반환
+
+### 파라미터 바인딩 - 이름 기준, 위치 기준
+
+```java
+// 이름 기준
+SELECT m From Member m where m.username= :username
+query.setParameter("username", usernameParam);
+
+// 위치 기준 -> 비추천
+SELECT m From Member m where m.username=?1
+query.setParameter(1, usernameParam);
+
+```
 
 ## 프로젝션(SELECT)
 
