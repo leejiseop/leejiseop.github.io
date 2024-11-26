@@ -201,6 +201,23 @@ System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
 
 ## 페이징
 
+JPA의 **페이징 추상화 API**
+**hibernate.dialect** 설정된 대로 적절히 **에뮬레이팅 되어 실행**된다
+MySQL, Oracle 3-depth rownum ... 등등
+
+- `setFirstResult(int startPosition)`: 조회 시작 위치 (0부터 시작)
+- `setMaxResults(int maxResult)`: 조회할 데이터 수
+
+```java
+String jpql = "select m from Member m order by m.name desc";
+List<Member> resultList = em.createQuery(jpql, Member.class)
+    .setFirstResult(10) // 시작 지점
+    .setMaxResults(20) // 몇 개
+    .getResultList();
+```
+
+메모 - toString 무한루프 주의
+
 
 
 ## 조인
