@@ -142,7 +142,62 @@ query.setParameter(1, usernameParam);
 
 ## 프로젝션(SELECT)
 
+SELECT 절에 조회할 대상을 지정하는 것  
+(엔티티, 임베디드 타입, 스칼라 타입(숫자 문자 등 기본 데이터 타입))  
+관계형 DB에서는 스칼라 타입만 가능하다  
+`select m from Member m` -> **엔티티** 프로젝션  
+`select m.team from Member m` -> **엔티티** 프로젝션 -> **묵시적 join 주의 필요**  
+(`"select t from Member m join m.team t", Team.class` -> **명시적 join**)  
+`select m.address from Member m` -> **임베디드 타입** 프로젝션  
+(임베디드 타입은 엔티티가 아니니 단독 조회는 불가능하다. 어디 소속인지 관계 명시 필요)  
+`select m.username, m.age from Member m` -> **스칼라 타입** 프로젝션  
+Type 떼고, DISTINCT로 중복 제거
+**조회 결과는 영속성 컨텍스트에서 관리된다**
 
+### 프로젝션 - 여러 값 조회
+
+1. **Query 타입**으로 조회
+2. **Object[] 타입**으로 조회
+3. **new 명령어**로 조회 **(추천)** (표준으로 지원하는 기능)
+    - 단순 값을 DTO로 바로 조회
+    - `SELECT new jpabook.jpql.UserDTO(m.username, m.age) FROM Member m`
+    - 패키지 명을 포함한 전체 클래스 명 입력
+    - 순서와 타입이 일치하는 생성자 필요
+
+```java
+// Query
+// Object를 List 형태로 받아오고
+List resultList = 
+    em.createQuery("SELECT m.username, m.age from Member m").getResultList();
+// List 안에 들어있는 Object를 꺼내고
+Object o = resultList.get(0);
+// 그걸 배열로 조회 가능하도록 Object[]로 캐스팅 후 접근
+Object[] result = (Object[]) o;
+
+System.out.println("username = " + result[0]);
+System.out.println("age = " + result[1]);
+```
+
+```java
+// TypeQuery 명시
+// List로 가져오면서 동시에 캐스팅
+List<Object[]> resultList = 
+    em.createQuery("SELECT m.username, m.age from Member m").getResultList();
+Object[] result = resultList.get(0);
+
+System.out.println("username = " + result[0]);
+System.out.println("age = " + result[1]);
+```
+
+```java
+// new 명령어로 조회
+// 코드가 너무 길어지면 -> QueryDSL로 해결 가능 (자바 코드로 짤 수 있다. 패키지명 import 가능)
+List<MemberDTO> result = em.createQuery("select new jpql.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
+    .getResultList();
+MemberDTO memberDTO = result.get(0);
+System.out.println("memberDTO.getUsername() = " + memberDTO.getUsername());
+System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
+```
 
 ## 페이징
 
