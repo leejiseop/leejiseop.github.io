@@ -218,18 +218,87 @@ List<Member> resultList = em.createQuery(jpql, Member.class)
 
 메모 - toString 무한루프 주의
 
-
-
 ## 조인
 
+- 내부 조인(inner join)
+  - `select m from Member m (inner) join m.team t`
+- 외부 조인(outer join)
+  - `select m from Member m left (outer) join m.team t`
+- 세타 조인(from 절이 두 개, 카르테시안 곱?)
+  - `select count(m) from Member m, Team t where m.username = t.name`
 
+- ON 절
+  - join 대상 **필터링**
+  - ex) 회원과 팀을 조인하면서, 팀 이름이 A인 팀만 조인
+```sql
+-- JPQL
+select m, t from Member m left join m.team t on t.name = 'A'
+-- SQL
+select m.*, t.* from Member m left join Team t on m.TEAM_ID=t.id and t.name = 'A'
+```
+  - **연관관계 없는 엔티티** 외부 조인(hibernate 5.1부터)
+  - ex) 회원의 이름과 팀의 이름이 같은 대상 외부 조인
+```sql
+-- JPQL
+select m, t from Member m left join Team t on m.username = t.name
+-- SQL
+select m.*, t.* from Member m left join Team t on m.username = t.name
+```
 
 ## 서브 쿼리
 
+나이가 평균보다 많은 회원
+```sql
+select m from Member m
+where m.age > (select avg(m2.age) from Member m2)
+-- 서브 쿼리와 메인 쿼리가 관계 없다
+```
 
+한 건이라도 주문한 고객
+```sql
+select m from Member m
+where (select count(o) from Order o where m = o.member) > 0
+-- 서브 쿼리가 메인 쿼리와 관계 있음 (성능 down)
+```
+
+### 서브 쿼리 지원 함수
+
+- (not) exists (subquery): 서브쿼리에 결과가 존재하면 참
+  - \{all \| any \| some\} (subquery)
+  - all: 모두 만족하면 참
+  - any, some: 같은 의미, 조건을 하나라도 만족하면 참
+- (not) in (subquery): 서브쿼리의 결과 중 하나라도 같은 것이 있으면 참
+
+```sql
+-- 팀A 소속인 회원
+select m from Member m
+where exists (select t from m.team t where t.name = '팀A')
+-- 전체 상품 각각의 재고보다 주문량이 많은 주문들
+select o from Order o
+where o.orderAmount > ALL (select p.stockAmount from Product p)
+-- 어떤 팀이든 팀에 소속된 회원
+select m from Member m
+where m.team = ANY (select t from Team t)
+```
+
+### JPA 서브 쿼리의 한계
+
+- JPA는 where, having 절에서만 서브 쿼리 사용 가능
+- select 절 서브 쿼리도 가능(JPA 표준 스펙은 아니지만, hibernate에서 지원)  
+`select (select avg(m1.age) from Member m1) as avgAge from Member m join Team t ... `
+- from 절의 서브 쿼리는 현재 JPQL에서 불가능
+  - (가능하다면) join으로 풀어서 해결, 애플리케이션으로 가져와서 일부만 사용, 쿼리 두번 분해해서 날리기, 네이티브 sql
+  - sql 내에 여러 로직(데이터 타입 변경, 문자 조작 등...)을 넣는 경우 from 절 서브쿼리가 자주 쓰인다
+    - 그런건 분리해서 애플리케이션으로 가져오면 from 절 서브쿼리를 줄일 수 있다
 
 ## JPQL 타입 표현과 기타식
 
+- 문자: 'HELLO', 'She''s'
+- 숫자: 10L(Long), 10D(Double), 10F(Float)
+- Boolean: TRUE, FALSE
+- enum: jpabook.MemberType.Admin (패키지명 포함)
+- 엔티티 타입: TYPE(m) = Member (상속 관계에서 사용)
+  - `em.createQuery("select i from Item i where type(i) = Book", Item.class)`
 
 
 ## 조건식(CASE 등)
