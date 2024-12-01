@@ -303,7 +303,79 @@ where m.team = ANY (select t from Team t)
 
 ## 조건식(CASE 등)
 
+```sql
+-- 기본 CASE 식
+select
+    case when m.age <= 10 then '학생요금'
+         when m.age >= 60 then '경로요금'
+         else '일반요금'
+    end
+from Member m
 
+-- 단순 CASE 식
+select
+    case t.name
+        when '팀A' then '인센티브 110%'
+        when '팀B' then '인센티브 120%'
+        else '인센티브 105%'
+    end
+from Team t
+```
 
+```sql
+-- COALESCE
+-- username이 null이면 '이름 없는 회원' 반환
+-- username이 null이 아니면 username 반환
+select COALESCE(m.username, '이름 없는 회원') from Member m
+
+-- NULLIF
+-- username이 '관리자'이면 null 반환
+-- username이 '관리자'가 아니면 username 반환
+select NULLIF(m.username, '관리자') from Member m
+```
 ## JPQL 함수
 
+### JPQL 기본 함수
+
+- CONCAT (hibernate에서는 'a' \|\| 'b' 도 지원)
+- SUBSTRING
+- TRIM
+- LOWER, UPPER
+- LENGTH
+- LOCATE
+- ABS, SQRT, MOD
+- SIZE(컬렉션의 크기)
+  - `select size(t.members) From Team t // team 인원 수`
+- INDEX(JPA 용도)
+  - @OrderColumn, 컬렉션의 위치값 조회 -> 사용 비추...
+
+### 사용자 정의 함수
+
+hibernate는 사용 전 방언에 추가해야한다.  
+사용하는 DB 방언을 상속받고, 사용자 정의 함수를 등록한다. registerFunction  
+`select function('group_concat', m.username) from Member m`  
+여러 결과를 한 줄로 출력 `s = 관리자1, 관리자2`  
+
+hibernate에서는 이렇게도 쓸 수 있다.
+(intelliJ 에서 오류라고 경고할 수도 있음 -> inject language -> Hibernate QL -> 문법 오류 해결)
+`select group_concat(m.username) from Member m`  
+
+
+```java
+// H2Dialect를 클릭해서 소스코드 열어보면, 어떻게 등록해서 쓰는지 나와있다.
+public class MyH2Dialect extends H2Dialect {
+    public MyH2Dialect() {
+        registerFunction(
+            "group_concat", 
+            new StandardSQLFunction(
+                "group_concat", StandardBasicTypes.STRING
+            )
+        );
+    }
+}
+```
+
+```xml
+<!-- persistence.xml 에서 등록해서 사용-->
+<property name="hibernate.dialect" value="dialect.MyH2Dialect"/>
+```
