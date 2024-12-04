@@ -24,10 +24,14 @@ nav_order: 12
 - 연관 필드
   - 단일 값 연관 경로: 묵시적 내부 조인, 탐색 O
     - `select m.team.name from Member m`
-  - 컬렉션 값 연관 경로: 묵시적 내부 조인, 탐색 X
+  - 컬렉션 값 연관 경로: 묵시적 내부 조인, 탐색 X (t.members.size 정도까지는 가능)
     - `select t.members from Team t`
-    - FROM 절에서 명시적 조인을 통해 별칭을 얻으면 **별칭을 통해 탐색 가능**
-**묵시적 내부 조인은 웬만하면 피하자** -> 성능 튜닝하기 힘듬
+    - FROM 절에서 **명시적 조인**을 통해 별칭을 얻으면 **별칭을 통해 탐색 가능**
+      - `select m.username from team t join t.members m`
+      - 별칭 m을 얻고 m.username 탐색  
+
+**묵시적 내부 조인은 웬만하면 피하자** -> 성능 튜닝하기 힘듬  
+**항상 명시적 조인을 사용하자!**  
 
 ```sql
 select m.username -- 상태 필드 (값)
@@ -37,10 +41,15 @@ join m.orders o -- 컬렉션 값 연관 필드 (컬렉션)
 where t.name = '팀A'
 ```
 
-
 ## 페치 조인 1 - 기본
 
+**Fetch join - 실무에서 엄청 중요함**
 
+- SQL join 종류 X
+- JPQL에서 **성능 최적화**를 위해 제공하는 기능
+- 연관된 엔티티나 컬렉션을 SQL 한번에 함께 조회하는 기능
+- join fetch 명령어 사용
+- `페치 조인 ::= [ left [ outer ] | inner ] join fetch 조인경로`
 
 ## 페치 조인 2 - 한계
 
