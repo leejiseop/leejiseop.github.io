@@ -82,7 +82,7 @@ JPA를 사용하면서 JDBC 커넥션을 직접 사용하거나, SpringJdbcTempl
 JPA를 우회해서 SQL을 실행하기 직전에 영속성 컨텍스트 수동 플러시 하는게 좋다.  
 - **flush가 동작**하는 경우
   - **commit 할 때**
-  - **query 날릴 때** (선 flush 후 query를 날린다)
+  - **query 날릴 때** (**선 flush** 후 query를 날린다)  
 
 ## 기본 문법과 쿼리 API
 
