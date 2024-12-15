@@ -11,4 +11,8 @@ nav_order: 8
 1. TOC
 {:toc}
 
-## 프록시
+## 상속관계 매핑
+
+## Mapped Superclass(매핑 정보 상속)
+
+## (예제) 상속관계 매핑
