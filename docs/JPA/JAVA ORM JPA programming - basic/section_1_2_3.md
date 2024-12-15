@@ -115,6 +115,9 @@ Java Persistence API
 ### JPA는 어떻게 동작하나?
 
 `persistence.xml`에서 설정 정보 조회 -> `EntityManagerFactory` 클래스 생성 -> `EntityManager` 생성  
+
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcwZNc4%2FbtrvhMSJJBE%2FqUGhjtwf1T5qpKjqeECHiK%2Fimg.png)
+
 ```java
 // 로딩 시점에 하나만 만들어둔다
 EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
