@@ -1,14 +1,14 @@
 ---
 layout: default
-title: 섹션 5
+title: 5. 엔티티 매핑
 parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 nav_order: 5
 ---
 
-# 섹션 5
+# 엔티티 매핑
 {: .no_toc }
 
 1. TOC
 {:toc}
 
-## 프록시
+## 객체와 테이블 매핑

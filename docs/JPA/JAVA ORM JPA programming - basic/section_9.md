@@ -1,11 +1,11 @@
 ---
 layout: default
-title: 섹션 9
+title: 9. 프록시와 연관관계 관리
 parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 nav_order: 9
 ---
 
-# 섹션 9
+# 프록시와 연관관계 관리
 {: .no_toc }
 
 1. TOC

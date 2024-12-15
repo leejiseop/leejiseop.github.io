@@ -1,11 +1,11 @@
 ---
 layout: default
-title: 섹션 10
+title: 10. 값 타입
 parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 nav_order: 10
 ---
 
-# 섹션 10
+# 값 타입
 {: .no_toc }
 
 1. TOC

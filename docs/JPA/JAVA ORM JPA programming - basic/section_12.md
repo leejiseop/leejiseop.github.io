@@ -1,11 +1,11 @@
 ---
 layout: default
-title: 섹션 12
+title: 12. 객체지향 쿼리 언어(중급)
 parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 nav_order: 12
 ---
 
-# 섹션 12
+# 객체지향 쿼리 언어(중급)
 {: .no_toc }
 
 1. TOC

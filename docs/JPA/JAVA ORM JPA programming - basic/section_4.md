@@ -1,14 +1,18 @@
 ---
 layout: default
-title: 섹션 4
+title: 4. 영속성 관리
 parent: 자바 ORM 표준 JPA 프로그래밍 - 기본편
 nav_order: 4
 ---
 
-# 섹션 4
+# 영속성 관리
 {: .no_toc }
 
 1. TOC
 {:toc}
 
-## 프록시
+## 영속성 컨텍스트
+
+## 플러시
+
+## 준영속 상태
