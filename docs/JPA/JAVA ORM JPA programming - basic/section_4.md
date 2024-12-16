@@ -35,6 +35,7 @@ nav_order: 4
     - id 값만 존재
   - 삭제 (removed)
     - 객체가 삭제됨
+    - `em.remove` (delete query)
 
 - 영속성 컨텍스트를 사용하는 이점?
   - 1차 캐시
@@ -51,8 +52,36 @@ nav_order: 4
       - commit 시점에 flush 되면서 순차적으로 한번에 날라간다
       - 그때그때마다 쿼리를 날리는게 아니라 한번에 모아 보내서 네트워크 비용 절약(JDBC batch?)
   - 변경 감지(Dirty Checking)
+    - flush -> entity와 snapshot 비교 -> update query 생성
   - 지연 로딩(Lazy Loading)
+
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FDdlOS%2Fbtrvl88LKkb%2FWbkuWG65iAj0UZAPpNFjX0%2Fimg.png)
 
 ## 플러시
 
+**영속성 컨텍스트의 변경사항을 DB에 반영** (보통 commit 시)  
+= 영속성 컨텍스트의 변경점과 **DB를 동기화**한다
+
+- flush 발생
+  - 변경 감지 ->
+  - 수정된 엔티티를 쓰기지연 SQL 저장소에 등록 ->
+  - **쓰기지연 SQL 저장소의 쿼리를** DB에 전송
+  - **영속성 컨텍스트가 비워지는게 아니다** -> 이거는 `em.clear()`
+- 언제 flush가 발생하나?
+  - em.flush() 직접 호출
+  - tx.commit() 자동 호출
+  - JPQL query 실행시 자동 호출
+    - 데이터베이스 일관성 확보
+- flush mode option
+  - FlushModeType.AUTO
+    - 커밋이나 쿼리를 실행할 때 flush (기본값)
+  - FlushModeType.COMMIT
+    - 커밋할 때만 flush (쓸 일 별로 없음)
+
 ## 준영속 상태
+
+영속 상태의 엔티틱가 영속성 컨텍스트에서 분리  
+- 준영속 상태로 만드는 방법
+  - `em.detach(entity)`
+  - `em.clear()`
+  - `em.close()`
