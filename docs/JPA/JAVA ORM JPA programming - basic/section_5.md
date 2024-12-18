@@ -87,7 +87,71 @@ JPA의 살행 로직(성능)에는 영향을 주지 않는다
 
 ## 기본 키 매핑
 
-
+- `@Id`
+  - 넉넉하게 Long 권장 -> 이후 변경 어렵기 때문에 미리 Long으로
+- `@GeneratedVallue`
+  - `GenerationType.AUTO`
+    - DB 방언에 맞춰서 아래 **3가지 중 하나가 자동 선택**됨
+  - `GenerationType.IDENTITY`
+    - 기본 키 생성을 **DB에 위임** (mysql -> auto_increment)
+    - JPA는 보통 트랜잭션 commit 시점에 insert sql 실행
+    - auto_increment는 **insert sql 실행 이후에 id 값을 알 수 있음**
+    - 그런데, 영속성 컨텍스트를 사용하려면 id(PK)값이 필요하다(?)
+      - **그래서 em.persist 호출시 -> 바로 insert 날리고 id값을 가져와서 영속성 컨텍스트 세팅**
+        - 내부 로직 상 return 으로 id값을 받아오기 때문에, 추가 select 쿼리는 날리지 않는다
+  - `GenerationType.SEQUENCE`
+    - oracle에서 자주 사용
+    - 기본적으로는 hibernate가 만든 **hibernate_sequence**를 사용하여 관리
+    - **Table마다 시퀀스를 따로 관리**하고싶으면 `@SequenceGenerator` 사용
+        ```java
+        @Entity
+        @SequenceGenerator(
+            name = "MEMBER_SEQ_GENERATOR", // 사용할 식별자 생성기 이름
+            sequenceName = "MEMBER_SEQ", // db에 등록되는 시퀀스 이름
+            initialValue = 1, // ddl 생성시에만 사용됨
+            allocationSize = 1 // 시퀀스 한번 호출에 증가하는 수 -> 최적화에 사용됨, 기본값 50
+            // db의 시퀀스 값이 하나씩 증가하도록 설정되어 있으면 allocationSize를 반드시 1로 설정해야한다
+            )
+        public class Member {
+            @Id
+            @GeneratedValue(
+                strategy = GenerationType.SEQUENCE,
+                generator = "MEMBER_SEQ_GENERATOR")
+            private Long id;
+        }
+        ```
+    - **em.persist 호출시 db에게서 값을 얻어온다 -> `call next value for MEMBER_SEQ`**
+      - IDENTITY와는 달리 insert query는 날아가지 않는다
+      - 버퍼링 가능
+      - allocationSize로 한번에 DB에서 가져와서 이후부턴 메모리에서 호출 -> 동시성 이슈 없음
+        - `create sequence MEMBER_SEQ start with 1 increment by 50`
+        - 너무 크게 잡으면 사용하지 않는 범위 손해볼 수도 있음
+        - 50 ~ 100 추천
+  - `GenerationType.TABLE`
+    - 키 생성 전용 **테이블을 만들어서 시퀀스를 흉내**
+    - 장점: 모든 DB에 사용 가능
+    - 단점: 성능, 락 위험, 운영에서는 부담 -> 비추.. 잘 안씀
+        ```java
+        @Entity
+        @TableGenerator(
+            name = "MEMBER_SEQ_GENERATOR", // 사용할 식별자 생성기 이름
+            table = "MY_SEQUENCES", // 생성 테이블명
+            pkColumnValue = "MEMBER_SEQ", // 키로 사용할 값 이름
+            allocationSize = 1
+            )
+        public class Member {
+            @Id
+            @GeneratedValue(
+                strategy = GenerationType.TABLE,
+                generator = "MEMBER_SEQ_GENERATOR")
+            private Long id;
+        }
+        ```
+  - **기본 키 제약 조건:** not null, 유일, **불변**
+    - 미래까지 이 조건을 만족하는 자연키는 찾기 어렵다 -> 대리키(대체키) 사용
+      - ex. 주민번호는 기본 키로 적절하지 않다 -> 향후 정책 변경 가능성
+    - 권장: Long형 + 대체키 + 키 생성전략 사용
+    - **비즈니스를 key로 끌고오지 말 것**
 
 ## (예제) 요구사항 분석과 기본 매핑
 
