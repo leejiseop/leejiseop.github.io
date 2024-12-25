@@ -74,7 +74,7 @@ public abstract class BaseEntity {
 
   @Column(name = "UPDATE_MEMBER")
   private String lastModifiedBy;
-  
+
   private LocalDateTime lastModifiedDate;
 
   // ... getter setter
@@ -101,3 +101,6 @@ public class Team extends BaseEntity {
 
 ## (예제) 상속관계 매핑
 
+처음부터 모든 프로그램이 거대하지는 않다  
+우선은 객체지향적 설계  
+이후 시스템 최적화
