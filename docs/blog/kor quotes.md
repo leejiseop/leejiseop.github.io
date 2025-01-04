@@ -41,4 +41,4 @@ fetch 주소를 localhost로 하니 Github pages 배포 이후 **CORS 문제**�
    })();
 </script>
 ```
-해당 코드를 `footer_custom.html`에 추가하였다.
+해당 코드를 `footer_custom.html`에 추가하고 CSS를 적절히 다듬어 마무리하였다.
