@@ -1,10 +1,10 @@
 ---
 layout: default
-title: 1. 웹 서비스 구조와 OS (1)
+title: 1. 웹 서비스 구조
 parent: 널널한개발자 면접 대비
 ---
 
-# 웹 서비스 구조와 OS (1)
+# 웹 서비스 구조
 
 - 웹을 이루는 핵심 기술
   - HTTP + HTML(CSS) (http 1.0)
@@ -33,7 +33,7 @@ parent: 널널한개발자 면접 대비
       - **전체적인 구조와 흐름 파악**이 중요하다
       - 왜 이렇게 되었나? 어떻게 변해왔나? **역사를 알면 흐름이 보인다**
 
----
+## 웹의 흐름
 
 - Web = HTTP + HTML (티모시 버너스 리)
   - 첫 시작은 '문서 공유' 였다
@@ -55,7 +55,10 @@ parent: 널널한개발자 면접 대비
   - client는 Cookie로 구현
     - key-value
   - POST로 데이터가 함께 넘어간다
-    - = **사용자 입력** = **무조건 신뢰하면 안된다** = **검증 대상**
+    - = **사용자 입력** = **무조건 신뢰하면 안된다** = **검증 대상** = 보안
+      - SQL injection, XSS attack
+        - 보안장치가 해줄수도 있고
+        - WAS에서 구현할 수도 있고 -> **시큐어 코딩**
     - Server에 Application 탑재 = Web Application Server = WAS
     - Client - Web Server - WAS - DB
       - View <- WAS(Control) -> Model = **MVC Architecture**
@@ -72,8 +75,32 @@ parent: 널널한개발자 면접 대비
       - 클라이언트에겐 JS가 있다
       - 프론트엔드 라이브러리 탄생
         - React, Vue.js, ...
-  - 전통적 의미의 web이 아닌 다른 개념이 성립하기 시작
-    - Request: 문서 달라는 의미에서 입출력을 해달라는 의미로 변화(I/O Request)
-      - 읽던지 쓰던지
-      - **CRUD**
-        - **RESTful API**
+
+- 전통적 의미의 web이 아닌 다른 개념이 성립하기 시작
+  - Request: 문서 달라는 의미에서 입출력을 해달라는 의미로 변화(I/O Request)
+    - 읽던지 쓰던지
+    - **CRUD**
+      - **RESTful API**
+
+- WAS와 DB 연결
+  - ODBC, JDBC, ...
+  - DB가 에러나면 모든것이 막힌다
+    - 장애 대응
+    - DB 질의응답 - **응답시간 모니터링**
+      - JVM에서 무슨 일이 나는지 안나는지
+      - JVM
+        - JSP, PHP, ASP, node.js ... 결국은 자바로 변환되어 JVM 위에서 실행
+          - Spring: Java reflextion 활용한 프레임워크 = Spring Container(객체)
+      - **APM**
+        - DB 응답시간 모니터링
+        - JVM 상태 모니터링
+        - 제니퍼, Scouter, Xlog
+          - 운영업무
+          - **운영을 고민하며 개발해야한다**
+
+- 웹서버 - WAS - DB
+  - 3-tier 구조
+  - 보안
+    - IPS - SSL - WAF - 웹서버 - (여기까지가 DMZ) - (WAF) - WAS - DB
+      - **ISMS-P 인증**
+      - 

@@ -1,7 +1,13 @@
 ---
 layout: default
-title: 2. 웹 서비스 구조와 OS (2)
+title: 2. 운영체제 기술
 parent: 널널한개발자 면접 대비
 ---
 
-# 웹 서비스 구조와 OS (2)
+# 운영체제 기술
+
+- 플랫폼: OS + hardware
+- 플랫폼에 의존적인 코드: Native code -> C, C++
+  - Java: Managed code
+- JVM: vCPU + vMem + vOS ...
+- 
