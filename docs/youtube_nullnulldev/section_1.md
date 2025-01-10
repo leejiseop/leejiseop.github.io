@@ -88,7 +88,7 @@ parent: 널널한개발자 면접 대비
     - 장애 대응
     - DB 질의응답 - **응답시간 모니터링**
       - JVM에서 무슨 일이 나는지 안나는지
-      - JVM
+      - **JVM**
         - JSP, PHP, ASP, node.js ... 결국은 자바로 변환되어 JVM 위에서 실행
           - Spring: Java reflextion 활용한 프레임워크 = Spring Container(객체)
       - **APM**
@@ -103,4 +103,4 @@ parent: 널널한개발자 면접 대비
   - 보안
     - IPS - SSL - WAF - 웹서버 - (여기까지가 DMZ) - (WAF) - WAS - DB
       - **ISMS-P 인증**
-      - 
+
