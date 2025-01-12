@@ -59,6 +59,14 @@ https://ably.com/topic/http-2-vs-http-3
   - client가 server 주소 알려달라고 DNS 질의하면 5.5.5.5(WAF) 알려줌
   - **모든 입력은 신뢰하면 안된다 - 검증**
     - 파라미터, 파일 업로드 ... 검사
+  - SSL 인증서 배치
 
 ## SSL 인증서는 어디에 설치되나?
 
+- "내가 접속한게 진짜 Google이 맞나" client에서 검증, **공증**
+  - **PKI, X.509**
+    - PAA(과학기술정보통신부, 미래창조과학부), PCA(정책인증기관, KISA), CA(인증기관), RA(등록기관)
+  - client가 생성한 **session key로** HTTP -> **HTTPS 암호화**
+  - CA -> RA -> 인증서 -> 서버 설치
+- PKI 인증체계
+  - **CA의 PK로 Hash 결과가 암호화** 되어 있으며 검증 과정에서는 PC에 사전 배포된 CA Public key로 암호를 풀어 **검증**할 수 있다
