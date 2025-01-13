@@ -1,10 +1,15 @@
 ---
 layout: default
-title: 쉬운코드 - 소켓 통신
+title: 쉬운코드 - 소켓 통신 과정
 parent: Network
 ---
 
-# 쉬운코드 - 소켓 통신
+
+# 쉬운코드 - 소켓 통신 과정
+{: .no_toc }
+
+1. TOC
+{:toc}
 
 ## OSI 7 Layer
 

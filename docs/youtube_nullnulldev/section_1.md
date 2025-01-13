@@ -5,6 +5,10 @@ parent: 널널한개발자 면접 대비
 ---
 
 # 웹 서비스 구조
+{: .no_toc }
+
+1. TOC
+{:toc}
 
 - 웹을 이루는 핵심 기술
   - HTTP + HTML(CSS) (http 1.0)
