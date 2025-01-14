@@ -1,12 +1,14 @@
 ---
 layout: default
-title: 쉬운코드 - 소켓 통신 과정
+title: 소켓 통신 과정
 parent: Network
 ---
 
 
-# 쉬운코드 - 소켓 통신 과정
+# 소켓 통신 과정
 {: .no_toc }
+
+출처: https://youtu.be/eveNtda0_yk?si=w2OR6D-y_mKys7sK
 
 1. TOC
 {:toc}
@@ -101,3 +103,4 @@ parent: Network
   - application header 따로 저장
     - s.ip_address, d.ip_address, s.port, d.port, application protocol header
   - payload와 header가 비즈니스 로직으로 전달
+
