@@ -50,3 +50,49 @@ parent: 널널한개발자 면접 대비
 
 ## GC와 JVM에 대해 물은 의도는 따로 있다
 
+- GC 종류
+  - Serial GC
+    - 단일 스레드 환경 및 소규모 응용프로그램을 위한 간단한 GC
+    - Minor GC에서 Copy & Scavenge 알고리즘 적용
+    - Full GC에서 Mark & Compact 알고리즘 적용
+  - Parallel GC
+    - JVM 기본 옵션(Java 8)
+    - 멀티스레드 기반(개수 지정 가능)으로 작동해 효율을 높임
+    - Low-pause(응용 프로그램 중단 최소화)
+    - Throughput(Mark & Compact 알고리즘을 기반으로 신속성 최대화)
+  - Concurrent GC
+    - Low-pause와 유사하며 응용 프로그램 실행 중 GC 실시
+    - 동작 중지 최소화
+  - Incremental GC (Train GC)
+    - Concurrent GC와 유사하나 Minor GC 발생 시 Full GC를 일부 병행
+    - 경우에 따라 오히려 더 느려지는 부작용
+  - G1(Garbage First) GC
+    - Young Generation, Eden ... 등이 아니라 regions 영역으로 구분
+    - **4GB 이상 대용량 Heap 메모리**를 사용하는 멀티스레드 기반 응용 프로그램에 특화된 GC
+    - **Heap을 영역(1~32MB)단위로 분할**한 후 멀티스레드로 스캔
+    - 가비지가 가장 많 은 영역부터 수집 실시
+  - CMS(Concurrent Mark Sweep) GC
+    - Java 9부터 사용하지 않다가, Java 14에서 G1 GC를 지원하고자 완전히 제거
+  - **각각 장단점 공부 필요**
+
+- 부하테스트
+  - APM과 NPM
+    - Application Performance Management
+      - 제니퍼, **Scouter**(무료)
+      - 어플리메이션 성능 모니터링
+    - Network Performance Management
+      - 여기까지 해보면 더 좋다
+  - Client - 이 지점을 부하테스트 - [Web server - WAS] - [DB]
+    - PC #1: Client
+    - PC #2: Web server + WAS
+    - PC #3: DB
+      - PC #2 #3에 APM 설치하여 모니터링
+      - 그걸 GUI 모니터링할 콘솔이 필요
+    - 부하테스트 -> 그래프가 튄다 -> 당연히 문제가 생길 수 밖에 없다
+      - **어떠한 문제인지 인지, 개선**
+        - 힌트는 어떻게 얻었는지?
+        - 어디를 어떻게?
+        - 그 결과
+          - **정량적인 평가**
+          - 응답속도, TPS ...
+      - **문서화**
