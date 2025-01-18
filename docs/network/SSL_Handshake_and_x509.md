@@ -1,16 +1,14 @@
 ---
 layout: default
-title: SSL Handshake와 인증서
+title: SSL Handshake와 x.509
 parent: Network
 ---
 
-# SSL Handshake와 인증서
+# SSL Handshake와 x.509 -> 좀더 공부..
 {: .no_toc }
 
 1. TOC
 {:toc}
-
-출처: https://nuritech.tistory.com/25
 
 - HTTPS 프로토콜을 사용하기 위해서는 서버가 인증기관(CA)으로부터 SSL 인증서를 발급받아야 한다
 
@@ -74,11 +72,26 @@ CA가 인증서를 CA의 비밀키로 암호화하여 서버로 전달
 인증서 안에 들어있던 서버의 공개키로 클라이언트와 서버의 대칭키 암호화  
 서버가 클라이언트의 대칭키를 자신의 비밀키로 복호화하여 사용  
 
-## 3줄 요약
+## 더 요약
 1. CA의 비밀키로 인증서를 암호화하여 서버로 전달
 2. 서버에게서 전달받은 인증서를 클라이언트가 CA의 공개키로 복호화
 3. 인증서에 들어있던 서버의 공개키로 통신에 사용할 대칭키를 암호화
 
 ## 추가 - X.509 인증서?
 
-- ㅁㄴㅇㄹ
+
+- 전자서명의 근본적인 원리
+  - 공개키로 암호화 -> 개인키로 복호화 -> 나만 메세지를 확인할 수 있다
+  - 개인키로 암호화 -> 공개키로 복호화 -> 내가 보냈다는걸 증명할 수 있다
+    - 이 공개키가 OO의 것이 맞는가? 확신할 수 없다 -> CA와 인증서의 등장
+    - 인증서의 표준 규칙을 정해야 할 필요 -> X509의 등장
+- x509는 **PKI의 표준** [링크](https://www.rootca.or.kr/kcac/down/TechSpec/1.1-KCAC.TS.CERTPROF.pdf)
+  - base64로 인코딩되어 저장되는 형식을 PEM
+  - 바이너리 형식으로 저장되는 형식을 DER
+- 인증서 발급은 수직관계
+  - RootCA와 ICA 등 하위 인증기관들 순차적으로 인증 (보통 3계층)
+  - RootCA 인증서와 이에 대응하는 공개키들은 웹브라우저에 미리 내장되어있다
+
+
+출처: https://nuritech.tistory.com/25  
+출처: https://gruuuuu.github.io/security/what-is-x509/  
