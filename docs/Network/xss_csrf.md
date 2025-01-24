@@ -45,3 +45,7 @@ parent: Network
       - 로그인시 or 작업요청시 CSRF 토큰을 생성하여 **세션에 저장**
       - 요청 페이지에 CSRF 토큰을 hidden으로 보이지않게 세팅하여 전송
   - CAPTCHA 사용
+
+## Drive-by Download
+
+- 악성 SW를 다운로드 시키도록 유도
