@@ -101,16 +101,100 @@ parent: JAVA
 **상황에 따라 필요한 GC 방식을 설정**해서 사용이 가능하다!
 
 - Serial GC
-  - CPU 코어가 1개일 경우, **가장 단순한 GC**
+  - **CPU 코어가 1개일 경우**, 가장 단순한 GC
   - **GC를 처리하는 쓰레드가 1개**이기 때문에 **Stop-the-World 시간이 가장 길다**
   - Minor GC: Mark-Sweep
   - Major GC: Mark-Sweep-Compact
+  - 실무에서는 잘 사용하지 않는다
+    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkBL3D%2FbtrIT91k2n7%2FOmhFna09F6duWkBh1FUFd0%2Fimg.png)
+  - 실행 명령어
+    - 자바 프로그램을 실행할때 -XX:+UseSerialGC GC 옵션을 지정하여 해당 가비지 컬렉션 알고리즘으로 힙 메모리를 관리하도록 실행
+    ```bash
+    java -XX:+UseSerialGC -jar Application.java
+    ```
+
 - Parallel GC
+  - **Java 8 버전의 기본 GC**
+  - Serial GC와 기본 알고리즘은 같지만 **Minor GC를 멀티 쓰레드로 수행**
+  -  -> **Stop-the-World 시간 감소**
+    ![Parallel GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FckjP6E%2FbtrIVf74R58%2FLdPm5Nmd3tCLFLuknpOc2K%2Fimg.png)
+  - 실행 명령어
+    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
+    ```bash
+    java -XX:+UseParallelGC -jar Application.java 
+    # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
+    ```
+
+- Parallel Old GC (Parallel Compacting Collector)
+  - Parallel GC를 개선한 버전
+  - Old 영역에서도 멀티쓰레드 GC 수행
+  - Mark-Summary-Compact 방식
+  - Serial GC와 기본 알고리즘은 같지만 **Minor GC를 멀티 쓰레드로 수행**
+  -  -> **Stop-the-World 시간 감소**
+    ![Parallel Old GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcs71MN%2FbtrI0ePXZqr%2F6nI0EkNdQ7fBzMYlwewk8K%2Fimg.png)
+  - 실행 명령어
+    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
+    ```bash
+    java -XX:+UseParallelOldGC -jar Application.java
+    # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
+    ```
+
 - CMS GC (Concurrent Mark Sweep)
+  - Stop-the-World 시간을 최대한 줄이기 위해 **어플리케이션 쓰레드와 GC 쓰레드가 동시 실행**
+  - 대신 **GC 과정이 복잡**해짐 -> GC 대상을 파악하는 과정이 복잡 -> CPU 사용량이 높다
+  - 메모리 파편화 문제
+  - Java 9부터 deprecated 되었고, Java 14에서는 **사용 중지**
+    ![CMS GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbtq9xn%2FbtrIUalHp5a%2Fuoqi42gxuTywMfm5Uhcs9k%2Fimg.png)
+  - 실행 명령어
+    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
+    ```bash
+    # deprecated in java9 and finally dropped in java14
+    java -XX:+UseConcMarkSweepGC -jar Application.java
+    ```
+
 - G1 GC (Garbage First)
+  - **CMS GC를 대체**하기 위해 jdk 7 버전에서 release
+  - **Java 9+ 버전의 기본 GC**
+  - 4GB 이상의 heap 메모리, Stop-the-World 시간이 0.5초 정도 필요한 상황에 사용
+    - **heap 메모리가 작을 경우에는 미사용 권장**
+  - 기존의 Young, Old와는 달리 **Region**이라는 새로운 개념 도임
+    - 전체 heap 영역을 체스같이 분할하여 상황에 따라 Eden, Survivor, Old 등 역할을 **고정이 아닌 동적으로 부여**
+    - Garbage로 가득찬 영역을 **빠르게 회수하여 빈 공간 확보** -> **GC 빈도가 줄어듬**
+  - 효율성
+    - 일일이 메모리를 탐색헤 객체들을 제거하지 않는다
+    - 대신 메모리가 많이 차있는 영역(Region)을 우선적으로 GC한다
+    - 즉, **메모리 전체가 아닌 영역별로 GC**가 일어난다
+    - 또한, Eden -> Survivor 0 -> Survivor 1 -> ... 순으로 이동되던 기존 GC와는 달리, G1 GC에서는 더욱 효율적이라고 생각되는 위치로 객체를 재할당(Reallocate) 시킨다
+      - ex. Survivor 1 영역의 객체를 Eden으로 옮기는 것이 더 효율적이라고 판단하고 재할당
+    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb3VAZL%2FbtrIVglH89c%2F80uC2DsGKDc1HXG57ByKak%2Fimg.png)
+  - 실행 명령어
+    ```bash
+    java -XX:+UseG1GC -jar Application.java
+    ```
+
 - Shenandoah GC
+  - ㅁㄴㅇㄹ
+    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkBL3D%2FbtrIT91k2n7%2FOmhFna09F6duWkBh1FUFd0%2Fimg.png)
+  - 실행 명령어
+    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
+    ```bash
+    java -XX:+UseParallelOldGC -jar Application.java
+    # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
+    ```
+
 - ZGC
+  - ㅁㄴㅇㄹ
+    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkBL3D%2FbtrIT91k2n7%2FOmhFna09F6duWkBh1FUFd0%2Fimg.png)
+  - 실행 명령어
+    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
+    ```bash
+    java -XX:+UseParallelOldGC -jar Application.java
+    # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
+    ```
+
 - 추가
   - Concurrent GC
   - Incremental GC (Train GC)
   - Epsilon
+
+출처: [링크](https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EA%B0%80%EB%B9%84%EC%A7%80-%EC%BB%AC%EB%A0%89%EC%85%98GC-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%F0%9F%92%AF-%EC%B4%9D%EC%A0%95%EB%A6%AC)
