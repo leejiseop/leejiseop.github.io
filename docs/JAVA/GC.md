@@ -83,9 +83,13 @@ parent: JAVA
   - 임계값에 다다르면 Promotion(Old 영역으로 이동) 여부 결정
   - HotSpot JVM -> age 기본 임계값 31 (6 bit)
 
-## Major GC 과정
+## Major GC 과정 (Full GC)
 
-- 
+- age 임계값에 도달한 객체들이 계속 Promotion되어 Old 영역의 메모리가 부족해지면 실행
+- Old 영역을 Mark and Sweep하는 단순한 방식
+  - 하지만 Young 영역에 비해 크기가 커서 대략적으로 10배 이상 걸린다
+  - Stop-the-World
+    - thread가 멈추고 mark and sweep 작업 실행 -> cpu 부하 -> 멈추거나 버벅임
 
 ## GC 알고리즘 종류
 
