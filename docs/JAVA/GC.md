@@ -93,4 +93,24 @@ parent: JAVA
 
 ## GC 알고리즘 종류
 
-- 
+**JVM이 메모리 관리**해주는것은 상당한 이점  
+-> 하지만 **그 시기를 예측하기 어려워** 애플리케이션이 갑자기 중지되는 문제 발생  
+-> 또한 자바가 발전됨에 따라 **Heap 사이즈도 커짐**  
+-> 애플리케이션이 중지되는 **문제가 더욱 빈번해짐** -> **최적화 알고리즘** 개발 필요  
+
+**상황에 따라 필요한 GC 방식을 설정**해서 사용이 가능하다!
+
+- Serial GC
+  - CPU 코어가 1개일 경우, **가장 단순한 GC**
+  - **GC를 처리하는 쓰레드가 1개**이기 때문에 **Stop-the-World 시간이 가장 길다**
+  - Minor GC: Mark-Sweep
+  - Major GC: Mark-Sweep-Compact
+- Parallel GC
+- CMS GC (Concurrent Mark Sweep)
+- G1 GC (Garbage First)
+- Shenandoah GC
+- ZGC
+- 추가
+  - Concurrent GC
+  - Incremental GC (Train GC)
+  - Epsilon
