@@ -12,19 +12,24 @@ parent: JAVA
 
 ## GC
 
+![heap](https://user-images.githubusercontent.com/14002238/113507707-1deb1000-9587-11eb-9ab6-2bbe0091be87.jpg)
+
 - Heap 메모리 영역 자동 정리
   - 단점
     - **메모리 해제 시점을 정확하게 알기 힘들다** -> 제어 힘듬
     - GC 동작 시 **다른 동작들이 멈춤** -> 오버헤드 발생 **(Stop-The-World)**
       - 실시간 성이 강조되는 프로그램일 경우, GC에 맡기는 것이 좋지 않을 수도 있다.
 
-## GC 대상 1:15
+## GC 대상
 
 - 특정 개체가 garbage인지 아닌지 판단해야한다
   - 도달성(Reachability)
     - 객체에 레퍼런스가 있다면(참조중이라면) reachable, 없다면 unreachable
 
 ## GC 방식
+
+![GC](https://velog.velcdn.com/images/ddangle/post/94e97f8c-7114-47e6-b8f2-05f9741fb911/image.png)
+![GC](https://velog.velcdn.com/images/ddangle/post/1e907432-c96c-4b46-bfd5-d13495fdbfae/image.png)
 
 - Mark and Sweep
   - Mark: Root Space부터 그래프 순회를 통해 어떤 객체들을 참조중인지 마킹
@@ -41,10 +46,10 @@ parent: JAVA
 ## heap 메모리의 구조
 
 - heap 영역은 2가지를 전제로 설계되었다
-  - 대부분의 객체는 금방 unreachable이 된다
-  - 오래된 객체에서 새로운 객체로의 참조는 아주 적게 존재한다
-- 즉, 객체는 대부분 일회성이며, 메모리에 오래 남아있는 경우는 드물다
-- 물리 영역을 Young과 Old로 나눔
+  - **대부분의 객체는 금방 unreachable이 된다**
+  - **오래된 객체에서 새로운 객체로의 참조는 아주 적게 존재한다**
+- 즉, **객체는 대부분 일회성**이며, 메모리에 오래 남아있는 경우는 드물다
+- heap 물리영역을 Young과 Old로 나눔
   - Young
     - 새로운 객체 할당
     - 수명이 짧은 객체들 -> 큰 영역 필요 없음
@@ -65,7 +70,7 @@ parent: JAVA
     - 생성된 객체들의 정보와 주소값을 저장
     - heap에 존재(Java 7) -> Native Method Stack에 존재(Java 8)
 
-## Minor GC 과정
+## Minor GC 과정 (Copy & Scavenge)
 
 - Young Generation 공간이 작다 -> 메모리 상의 객체를 빨리 찾아서 제거하기 수월하다
 1. Eden 영역이 꽉 차면 minor GC 실행
@@ -83,15 +88,27 @@ parent: JAVA
   - 임계값에 다다르면 Promotion(Old 영역으로 이동) 여부 결정
   - HotSpot JVM -> age 기본 임계값 31 (6 bit)
 
-## Major GC 과정 (Full GC)
+## Major GC 과정 (Full GC, Mark & Compact)
 
 - age 임계값에 도달한 객체들이 계속 Promotion되어 Old 영역의 메모리가 부족해지면 실행
 - Old 영역을 Mark and Sweep하는 단순한 방식
   - 하지만 Young 영역에 비해 크기가 커서 대략적으로 10배 이상 걸린다
   - Stop-the-World
-    - thread가 멈추고 mark and sweep 작업 실행 -> cpu 부하 -> 멈추거나 버벅임
+    - thread가 멈추고 mark and sweep 작업 실행 -> cpu 부하 -> 애플리케이션이 멈추거나 버벅임
+- Compact 실행
 
 ## GC 알고리즘 종류
+
+- Non Concurrent Collectors
+  - Serial Collector
+  - Parallel Collector
+  - Parallel Old Collector
+  - Incremental GC
+
+- Concurrent Collectors
+  - Concurrent Mark Sweep Collector (CMS)
+  - Garbage-First Collector (G1GC)
+  - Z Collector (ZGC)
 
 **JVM이 메모리 관리**해주는것은 상당한 이점  
 -> 하지만 **그 시기를 예측하기 어려워** 애플리케이션이 갑자기 중지되는 문제 발생  
@@ -113,7 +130,7 @@ parent: JAVA
     java -XX:+UseSerialGC -jar Application.java
     ```
 
-- Parallel GC
+- Parallel GC (Throughput GC)
   - **Java 8 버전의 기본 GC**
   - Serial GC와 기본 알고리즘은 같지만 **Minor GC를 멀티 쓰레드로 수행**
   -  -> **Stop-the-World 시간 감소**
@@ -138,12 +155,18 @@ parent: JAVA
     # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
     ```
 
-- CMS GC (Concurrent Mark Sweep)
+- CMS GC (Concurrent Mark Sweep, Low Latency GC)
   - Stop-the-World 시간을 최대한 줄이기 위해 **어플리케이션 쓰레드와 GC 쓰레드가 동시 실행**
   - 대신 **GC 과정이 복잡**해짐 -> GC 대상을 파악하는 과정이 복잡 -> CPU 사용량이 높다
-  - **메모리 단편화** 문제 (외부)
+  - Compaction 단계 없음 -> **메모리 단편화** 문제 (외부)
+    - Compaction을 진행하면 다른 GC보다 더 오래 걸린다
   - Java 9부터 deprecated 되었고, Java 14에서는 **사용 중지**
+    ![CMS GC](https://velog.velcdn.com/images/ddangle/post/5d25731f-7681-4cf6-9e98-61dc8ac4e565/image.png)
     ![CMS GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbtq9xn%2FbtrIUalHp5a%2Fuoqi42gxuTywMfm5Uhcs9k%2Fimg.png)
+  - `Initial Mark`: 클래스 로더에서 가장 가까운 객체 중 살아있는 객체를 찾는다
+  - `Concurrent Mark`: 앞에서 마크한 객체들을 따라가면서 확인
+  - `ReMark`: 앞에서 새로 추가되거나 참조가 끊긴 객체들을 호가인
+  - `Concurrent Sewwp`: 쓰레기 정리 작업
   - 실행 명령어
     ```bash
     # deprecated in java9 and finally dropped in java14
@@ -174,6 +197,7 @@ parent: JAVA
   - Java 12에 release, RedHat에서 개발한 GC
   - **기존 CMS의 메모리 단편화, G1의 pause 이슈 해결**
   - 강력한 Concurrency와 가벼운 GC 로직 -> **heap 사이즈에 영향을 받지 않고 일정한 pause 시간 소요**
+  - ZGC와 비슷하게 대량의 메모리 처리에 우수한 퍼포먼스를 내지만 좀 더 많은 옵션을 제공
     ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FlHh4s%2FbtrISNkkpMV%2FcuFxgmAT0DuafPhABn0L00%2Fimg.png)
   - 실행 명령어
     ```bash
@@ -183,6 +207,7 @@ parent: JAVA
 - ZGC
   - Java 15에 release
   - 대용량 메모리(8MB ~ 16TB)를 low-latency로 처리하기 위해 디자인 된 GC
+  - 어플리케이션과 Concurrently하게 동작 -> Heap Reference를 위해 Load barrier를 사용
   - G1의 region처럼 **ZPage**라는 영역을 사용
   - G1의 region은 크기가 고정인 반면 ZPage는 **2MB 배수로 동적으로 운영**
   - **heap 크기가 증가하더라도 Stop-the-World 시간이 절대 10ms를 넘지 않는다**
@@ -193,10 +218,56 @@ parent: JAVA
     ```
 
 - Incremental GC (Train GC)
-
-
-
+  - Full GC에서 의해 애플리케이션이 멈추는 시간을 줄이기 위함 (응답성이 중요한 경우)
+  - Minor GC가 일어날 때마다 Old 영역을 조금씩 GC -> Full GC가 발생하는 횟수나 시간을 줄임
 
 - Epsilon GC
+  - 수학에서 '아주 작은 값'을 나타내는 ε (epsilon)에서 유래
+    - 최소한의 기능만 가진 GC, 즉 '아무것도 하지 않는 GC'라는 의미
+  - Java Heap 영역을 모두 소진하게 되면 JVM이 Shut down (`OutOfMemoryError`)
+  - Epsilon의 목적은 제한된 영역의 메모리 할당을 허용 -> 최대한 latency overhead를 줄인다
+  - 외부 환경으로부터 고립된 채로 실행 -> 메모리 사용량과 퍼포먼스 등을 보다 정확하게 측정할
+  - 주 사용 사례
+    - GC의 성능 영향을 제외하고 애플리케이션 성능을 테스트할 때
+    - 메모리 수명이 짧아 GC가 필요 없는 상황
 
-출처: [링크](https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EA%B0%80%EB%B9%84%EC%A7%80-%EC%BB%AC%EB%A0%89%EC%85%98GC-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%F0%9F%92%AF-%EC%B4%9D%EC%A0%95%EB%A6%AC)
+## GC 선정 기준
+
+- **성능상 이슈가 없다면 JVM이 선정해주는 Collector를 사용한다**
+- 적은 데이터, 싱글 코어 -> Serial GC
+- 전체 처리량이 중요, Stop-the-World 시간이 1초 이상이어도 괜찮다 -> Parallel GC
+- 응답 시간이 중요, Stop-the-World 시간이 1초 이하여야 한다 -> Concurrent Collectors 중 택 1
+  - Java 15 미만: ZGC는 실험적 GC(옵션 활성화 필요)이기 때문에 G1GC와 CMS를 비교하여 적절한 것을 채택
+  - Java 11: G1GC (default)
+  - Java 8: CMS (default)
+- Collector를 변경해가며 벤치마크 진행하며 성능과 리소스 사용량 확인
+
+## GC 로그 수집 방법
+
+- JVM에서 GC 로그 수집 옵션 제공
+  - 자바 실행용 `.jar` 파일 생성 -> 실행 옵션으로 `-verbosegc` -> `>` 리다이렉션 명령어로 파일로 저장 후 분석
+
+## JVM GC 튜닝
+
+- 목표값 설정
+  - 메모리 사용량? GC 횟수? GC 시간? 성능 향상? -> 목표치에 근접하도록 JVM 파라미터 조정
+- heap 크기와 permanent(Java 7 이하) 크기 설정
+  - `java -Xms2048m -Xmx2048m -jar application.jar`
+  - `-Xms`, `-Xmx` -> heap 메모리 초기 크기, 최대 크기
+  - 급격한 변화가 있는 경우가 아닌 대부분의 경우에는 동일한 것이 좋다
+    - Growing, Shrinking 등 불필요한 heap 추가요청을 없앤다
+- 테스트와 로그 분석
+  - GC 로그, 부하 테스트(nGrinder, JMeter) 로그 수집
+- permanent 크기 조정
+- GC 수행시간 분석
+  - Full GC가 많이 일어남 -> Old 영역 늘림 -> Full GC 횟수 감소, 시간 증가
+  - 서버 어플리케이션은 Full GC시 JVM 자체가 멈춰버리기 때문에 일정 시간동안 응답을 못하는 상태가 된다
+  - Full GC 횟수와 시간을 모두 줄이려면
+    - Old 영역 메모리 줄이기 -> Full GC 시간 감소
+    - 여러 개의 인스턴스를 동시에 띄워서 부하 분산 -> Full GC 횟수 감소
+      - 하나가 멈춰있는 동안 다른쪽이 응답 -> 애플리케이션이 멈출 때 받는 영향 최소화
+- 파라미터
+  - Old와 New(Eden, Survivor) 영역 배분
+
+
+출처 [인파](https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EA%B0%80%EB%B9%84%EC%A7%80-%EC%BB%AC%EB%A0%89%EC%85%98GC-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%F0%9F%92%AF-%EC%B4%9D%EC%A0%95%EB%A6%AC) [땡글로그](https://velog.io/@ddangle/Java-GC-Garbage-Collector%EC%97%90-%EB%8C%80%ED%95%B4) [RoyOps](https://imprint.tistory.com/35) [준비된개발자](https://readystory.tistory.com/48) [dongwookiee96](https://dongwooklee96.github.io/post/2021/04/04/gcgarbage-collector-%EC%A2%85%EB%A5%98-%EB%B0%8F-%EB%82%B4%EB%B6%80-%EC%9B%90%EB%A6%AC.html)
