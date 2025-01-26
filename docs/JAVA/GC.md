@@ -41,8 +41,6 @@ parent: JAVA
 
 ![GC memory](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FtgPPC%2FbtrI2Z4pXMo%2FJEIwKoiT0J5I3gyQSYRzl1%2Fimg.png)
 
-출처: [인파 블로그](https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EA%B0%80%EB%B9%84%EC%A7%80-%EC%BB%AC%EB%A0%89%EC%85%98GC-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%F0%9F%92%AF-%EC%B4%9D%EC%A0%95%EB%A6%AC)
-
 ## heap 메모리의 구조
 
 - heap 영역은 2가지를 전제로 설계되었다
