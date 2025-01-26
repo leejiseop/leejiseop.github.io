@@ -108,7 +108,7 @@ parent: JAVA
   - 실무에서는 잘 사용하지 않는다
     ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkBL3D%2FbtrIT91k2n7%2FOmhFna09F6duWkBh1FUFd0%2Fimg.png)
   - 실행 명령어
-    - 자바 프로그램을 실행할때 -XX:+UseSerialGC GC 옵션을 지정하여 해당 가비지 컬렉션 알고리즘으로 힙 메모리를 관리하도록 실행
+    - 자바 프로그램을 실행할때 -XX:+UseSerialGC GC 옵션을 지정 -> 해당 가비지 컬렉션 알고리즘으로 힙 메모리를 관리하도록 실행
     ```bash
     java -XX:+UseSerialGC -jar Application.java
     ```
@@ -133,7 +133,6 @@ parent: JAVA
   -  -> **Stop-the-World 시간 감소**
     ![Parallel Old GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcs71MN%2FbtrI0ePXZqr%2F6nI0EkNdQ7fBzMYlwewk8K%2Fimg.png)
   - 실행 명령어
-    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
     ```bash
     java -XX:+UseParallelOldGC -jar Application.java
     # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
@@ -142,11 +141,10 @@ parent: JAVA
 - CMS GC (Concurrent Mark Sweep)
   - Stop-the-World 시간을 최대한 줄이기 위해 **어플리케이션 쓰레드와 GC 쓰레드가 동시 실행**
   - 대신 **GC 과정이 복잡**해짐 -> GC 대상을 파악하는 과정이 복잡 -> CPU 사용량이 높다
-  - 메모리 파편화 문제
+  - **메모리 단편화** 문제 (외부)
   - Java 9부터 deprecated 되었고, Java 14에서는 **사용 중지**
     ![CMS GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbtq9xn%2FbtrIUalHp5a%2Fuoqi42gxuTywMfm5Uhcs9k%2Fimg.png)
   - 실행 명령어
-    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
     ```bash
     # deprecated in java9 and finally dropped in java14
     java -XX:+UseConcMarkSweepGC -jar Application.java
@@ -173,28 +171,32 @@ parent: JAVA
     ```
 
 - Shenandoah GC
-  - ㅁㄴㅇㄹ
-    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkBL3D%2FbtrIT91k2n7%2FOmhFna09F6duWkBh1FUFd0%2Fimg.png)
+  - Java 12에 release, RedHat에서 개발한 GC
+  - **기존 CMS의 메모리 단편화, G1의 pause 이슈 해결**
+  - 강력한 Concurrency와 가벼운 GC 로직 -> **heap 사이즈에 영향을 받지 않고 일정한 pause 시간 소요**
+    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FlHh4s%2FbtrISNkkpMV%2FcuFxgmAT0DuafPhABn0L00%2Fimg.png)
   - 실행 명령어
-    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
     ```bash
-    java -XX:+UseParallelOldGC -jar Application.java
-    # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
+    java -XX:+UseShenandoahGC -jar Application.java
     ```
 
 - ZGC
-  - ㅁㄴㅇㄹ
-    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkBL3D%2FbtrIT91k2n7%2FOmhFna09F6duWkBh1FUFd0%2Fimg.png)
+  - Java 15에 release
+  - 대용량 메모리(8MB ~ 16TB)를 low-latency로 처리하기 위해 디자인 된 GC
+  - G1의 region처럼 **ZPage**라는 영역을 사용
+  - G1의 region은 크기가 고정인 반면 ZPage는 **2MB 배수로 동적으로 운영**
+  - **heap 크기가 증가하더라도 Stop-the-World 시간이 절대 10ms를 넘지 않는다**
+    ![Serial GC](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FIKx8x%2FbtrIT9f9qjM%2Ff1g0NHSGJI7ce9rfxPZyuk%2Fimg.png)
   - 실행 명령어
-    - GC 스레드는 기본적으로 cpu 개수만큼 할당 -> 옵션을 통해 설정 가능
     ```bash
-    java -XX:+UseParallelOldGC -jar Application.java
-    # -XX:ParallelGCThreads=N : 사용할 쓰레드의 갯수
+    java -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -jar Application.java
     ```
 
-- 추가
-  - Concurrent GC
-  - Incremental GC (Train GC)
-  - Epsilon
+- Incremental GC (Train GC)
+
+
+
+
+- Epsilon GC
 
 출처: [링크](https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EA%B0%80%EB%B9%84%EC%A7%80-%EC%BB%AC%EB%A0%89%EC%85%98GC-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%F0%9F%92%AF-%EC%B4%9D%EC%A0%95%EB%A6%AC)
