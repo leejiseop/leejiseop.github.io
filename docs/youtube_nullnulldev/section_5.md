@@ -39,6 +39,28 @@ parent: 널널한개발자 면접 대비
   - 일관성 Consistency
   - 격리성 Isolation
   - 지속성 Durability
+- RAM에 올라온걸 2차 메모리에 실질 반영 = commit
+- **동시성 관련 이슈**
+  - 커밋 완료 전 read (dirty read)
+  - 커밋 완료 전 overwrite
+  - read 중 데이터가 변경되는 경우
+  - 변경한 데이터 유실 (lost update)
+- 트랜잭션 isolation level
+  - READ UNCOMMITED
+  - READ-COMMITED
+  - REPEATABLE READ
+    - 트랜잭션 동안 데이터를 읽게 함
+    - 특정 버전에 해당하는 데이터를 읽음
+  - SERIALIZABLE
 
 ## DB 커넥션 풀의 용도와 필요를 묻는 숨은 의도
 
+- DBCP Connection Pool 연결 대기 지연 현상 [SK C&C TECH BLOG](https://engineering-skcc.github.io/cloud/tomcat/apache/DB-Pool-For-Event/)
+  - 한정판 굿즈 판매 이벤트, 대학교 수강신청, 명절 KTX 예매 ...
+  - connection pool이 부족하지면 다른 자원이 여유있어도 장애가 발생한다
+  - 경우에 따라서는 pool이 아닌 설정 문제일수도
+- request가 오고나서 WAS-DB 연결하고 DB 질의하면 너무 오래걸림
+  - DB 연결도 시간이 꽤 걸리는 작업
+  - 그래서 미리 연결시켜둔다 - connection pool - 응답성을 높인다
+  - 미들웨어(Tomcat ...)가 관리
+- 
