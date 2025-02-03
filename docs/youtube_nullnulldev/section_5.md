@@ -55,12 +55,15 @@ parent: 널널한개발자 면접 대비
 
 ## DB 커넥션 풀의 용도와 필요를 묻는 숨은 의도
 
-- DBCP Connection Pool 연결 대기 지연 현상 [SK C&C TECH BLOG](https://engineering-skcc.github.io/cloud/tomcat/apache/DB-Pool-For-Event/)
+- DBCP Connection Pool 연결 대기 지연 현상 [SK C&C TECH BLOG](https://engineering-skcc.github.io/cloud/tomcat/apache/DB-Pool-For-Event/) -> **꼭 읽어보기!**
   - 한정판 굿즈 판매 이벤트, 대학교 수강신청, 명절 KTX 예매 ...
   - connection pool이 부족하지면 다른 자원이 여유있어도 장애가 발생한다
   - 경우에 따라서는 pool이 아닌 설정 문제일수도
 - request가 오고나서 WAS-DB 연결하고 DB 질의하면 너무 오래걸림
   - DB 연결도 시간이 꽤 걸리는 작업
-  - 그래서 미리 연결시켜둔다 - connection pool - 응답성을 높인다
+  - 그래서 **미리 연결**시켜둔다 - **connection pool** - 응답성을 높인다
+    - **모자르면 -> 새 connection 생성** -> 연결하느라 느려짐
+    - 어느정도가 적당...? -> **부하테스트**
   - 미들웨어(Tomcat ...)가 관리
-- 
+- **결국은 운영 이슈**
+  - 운영을 고려하는 개발
