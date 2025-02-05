@@ -1,6 +1,6 @@
 ---
 layout: default
-title: JPA
+title: 김영한 JPA
 nav_order: 4
 ---
 
