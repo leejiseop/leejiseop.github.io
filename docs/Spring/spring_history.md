@@ -2,7 +2,7 @@
 layout: default
 title: Spring 간단 역사
 nav_order: 0
-parent: 김영한 Spring
+parent: Spring
 ---
 
 # Spring 간단 역사

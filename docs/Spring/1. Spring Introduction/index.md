@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 스프링 입문
-parent: 김영한 Spring
+parent: Spring
 nav_order: 1
 ---
 
