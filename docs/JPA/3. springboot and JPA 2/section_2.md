@@ -87,7 +87,13 @@ static class SimpleOrderDto {
 }
 ```
 
-- 
+- 쿼리가 총 1 + N + N번 실행 (v1과 쿼리수 결과는 같음)
+  - `order` 조회 1번 (조회 결과 수: N)
+  - `order -> member` 지연 로딩 조회 N 번
+  - `order -> delivery` 지연 로딩 조회 N 번
+- order의 결과가 4개면 최악의 경우 1+4+4번 실행
+- **지연로딩은 영속성 컨텍스트에서 조회**
+  - 이미 조회된 경우 쿼리를 생략
 
 
 ## 엔티티를 DTO로 변환 - fetch join 최적화
@@ -114,7 +120,8 @@ public List<Order> findAllWithMemberDelivery() {
 }
 ```
 
-- 
+- 실무에서 정말 자주 사용하는 최적화 기법
+- **fetch join은 꼭 100% 이해해야한다**
 
 
 ## JPA에서 DTO로 바로 조회

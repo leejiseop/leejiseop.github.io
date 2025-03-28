@@ -11,6 +11,8 @@ nav_order: 10
 1. TOC
 {:toc}
 
+[참고링크](https://tall-developer.tistory.com/16)
+
 ## JPA의 데이터 분류
 
 JPA는 데이터를 두 가지 타입으로 분류한다
