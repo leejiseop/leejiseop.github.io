@@ -95,7 +95,6 @@ static class SimpleOrderDto {
 - **지연로딩은 영속성 컨텍스트에서 조회**
   - 이미 조회된 경우 쿼리를 생략
 
-
 ## 엔티티를 DTO로 변환 - fetch join 최적화
 
 ```java
@@ -134,13 +133,19 @@ public List<OrderSimpleQueryDto> ordersV4() {
 ```
 
 ```java
+// OrderRepository
 public class OrderSimpleQueryRepository {
     private final EntityManager em;
     public List<OrderSimpleQueryDto> findOrderDtos() {
         return em.createQuery(
             "select new
-            jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto(o.id, m.name,
-            o.orderDate, o.status, d.address)" +
+            jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto(
+                o.id,
+                m.name,
+                o.orderDate,
+                o.status,
+                d.address
+            )" +
             " from Order o" +
             " join o.member m" +
             " join o.delivery d", OrderSimpleQueryDto.class
@@ -148,6 +153,23 @@ public class OrderSimpleQueryRepository {
     }
 }
 ```
+
+- JPA는 엔티티나 임베더블 정도만 반환 가능
+- OrderSimpleQueryDto.class로 매핑하기 위해 **new 명령어**가 필요
+- **내가 원하는 컬럼만 select** 해서 dto로 만들어서 return
+- v3
+  - 외부의 모습을 건드리지 않는 선에서 lazy 부분만 내가 선택해서 join
+  - 여러곳에서 활용 가능
+- v4
+  - 사실상 jpql 직접 짜는것
+  - 재사용성이 낮다
+  - 코드가 지저분
+  - 요즘은 v3 방식과 성능 차이 크게 안남
+    - 성능차이는 join, 인덱스, 네트워크 문제
+    - 필요시 성능 테스트하여 적용 결정
+  - 성능 최적화용 별도의 레포지토리를 만들어서 관리하면 편하다
+- v1 ~ v4 순서로 적용 검토
+  - 그래도 더 최적화 하고싶으면 네이티브 SQL이나 JDBC Template 사용
 
 ```java
 @Data
@@ -168,6 +190,6 @@ public class OrderSimpleQueryDto {
 }
 ```
 
-
-- 
-
+- 조회 후 DTO변환 없이 바로 DTO로 바로 조회
+- 의존관계는 한방향으로만 흘러야한다
+  - ex. 컨트롤러 -> 서비스 -> 리포지토리
