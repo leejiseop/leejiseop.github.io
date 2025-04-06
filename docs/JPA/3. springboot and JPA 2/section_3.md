@@ -60,7 +60,30 @@ orderDto = OrderApiController.OrderDto(orderId=11, name=userB, orderDate=2025-03
 
 ## 주문 조회 V3.1: 엔티티를 DTO로 변환 - 페이징과 한계 돌파
 
-- 
+- ~ToOne은 일단 다 가져와놓고
+- application.yaml
+  - jpa
+    - properties
+      - default_batch_fetch_size: 100
+- order 내부의 orderItems 컬렉션: @OneToMany
+- where ~ in ~ 쿼리가 날라간다
+  - select ... from order_item where order_id in (4, 11);
+- default_batch_fetch_size: 몇 개의 in 쿼리를 날릴건지
+  - 설정한 값만큼 루프를 돌면서 가져온다
+
+- 이정도만 해도 웬만한 성능이 나온다
+- 이 이상의 최적화는 레디스 캐시 등 활용
+
+- v3 `fetch join`
+  - 데이터가 N만큼 한번에 뻥튀기됨
+  - 용량 이슈 생길수도
+  - 페이징 불가
+- v3.1 `defaultBatchSize` = `@Batchsize(size = 100)`
+  - 쿼리는 3번 나가지만(여러번 나눠서 가져온다)
+  - 한방에 가져오는 데이터 양은 줄어들고
+  - 중복 없이 정확한 데이터들만 가져온다(정규화와 비슷)
+  - 페이징 가능
+- 상황에 따라 다르다
 
 ## 페이징과 한계 돌파
 
