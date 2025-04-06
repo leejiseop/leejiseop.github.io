@@ -46,8 +46,17 @@ orderDto = OrderApiController.OrderDto(orderId=11, name=userB, orderDate=2025-03
   - DB의 `distinct`는 row가 정말 똑같아야 중복 제거
   - **DB 쿼리 결과는 차이없고** JPA 자체적으로 값을 매핑할때 **같은 객체 id값이면 중복 제거**(컬렉션 담을 때)
   - **단점: 페이징 불가**
-    - 페이징 쿼리가 아예 안나감
+    - **페이징 쿼리가 아예 안나감**
     - `firstResult/maxResults specified with collection fetch; applying in memory!`
+      - **데이터를 전부 가져와서 메모리에서 페이징 처리**하겠다
+      - 데이터가 많은 경우 `out of memory` 문제 생길수도
+    - 우리가 기대하는 order: **2개**
+    - 실제 데이터(쿼리 결과): **4개**
+    - 여기에서 오는 불일치..
+    - 일대다 fetch join에서는 페이징을 하면 안된다
+      - **대안이 있다**
+- 컬렉션 fetch join은 1개만 사용 가능
+  - 여러개 쓰면 데이터가 1 * N * N * ... 으로 뻥튀기된다
 
 ## 주문 조회 V3.1: 엔티티를 DTO로 변환 - 페이징과 한계 돌파
 
